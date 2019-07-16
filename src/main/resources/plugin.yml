@@ -1,0 +1,4 @@
+name: World1-6Economy
+main: World16Economy.Main.Main
+version: 1
+depends: [Vault]
