@@ -86,18 +86,12 @@ public class TheCore implements Economy {
 
     @Override
     public double getBalance(String uuid) {
-        if (hasAccount(uuid)) {
-            return moneyMap.get(UUID.fromString(uuid)).getBalance();
-        }
-        return 0;
+        return dataManager.getUserObjectFromConfig(UUID.fromString(uuid)) ? moneyMap.get(UUID.fromString(uuid)).getBalance() : 0;
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        if (hasAccount(offlinePlayer)) {
-            return moneyMap.get(offlinePlayer.getUniqueId()).getBalance();
-        }
-        return 0;
+        return dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId()) ? moneyMap.get(offlinePlayer.getUniqueId()).getBalance() : 0;
     }
 
     @Override
@@ -136,6 +130,7 @@ public class TheCore implements Economy {
         if (p != null) {
             if (hasAccount(uuid)) {
                 if (this.moneyMap.get(UUID.fromString(uuid)).checkIfHaveEnough((long) amount)) {
+                    this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
                 }
                 p.sendMessage(Translate.chat("You do not have enough money dumper."));
@@ -151,6 +146,7 @@ public class TheCore implements Economy {
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer.getUniqueId().toString())) {
             if (this.moneyMap.get(offlinePlayer.getUniqueId()).checkIfHaveEnough((long) amount)) {
+                this.moneyMap.get(offlinePlayer.getUniqueId()).subtractBalance((long) amount);
                 return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
             }
             return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalance(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
