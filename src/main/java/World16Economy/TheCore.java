@@ -66,12 +66,12 @@ public class TheCore implements Economy {
 
     @Override
     public boolean hasAccount(String uuid) {
-        return dataManager.getUserObjectFromConfig(UUID.fromString(uuid));
+        return dataManager.isUser(UUID.fromString(uuid));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId());
+        return dataManager.isUser(offlinePlayer.getUniqueId());
     }
 
     @Override

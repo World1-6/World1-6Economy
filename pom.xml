@@ -26,7 +26,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>World1-6Essentials</finalName>
+                            <finalName>World1-6Economy</finalName>
                             <relocations>
                                 <relocation>
                                     <pattern>com.zaxxer.hikari</pattern>

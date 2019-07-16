@@ -1,9 +1,12 @@
 package World16Economy.Main;
 
+import World16Economy.Commands.bal;
+import World16Economy.Events.OnPlayerJoinEvent;
+import World16Economy.Events.OnPlayerQuitEvent;
 import World16Economy.Managers.CustomConfigManager;
 import World16Economy.Managers.DataManager;
-import World16Economy.Utils.SetListMap;
 import World16Economy.Managers.VaultManager;
+import World16Economy.Utils.SetListMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -22,16 +25,29 @@ public class Main extends JavaPlugin {
         this.setListMap = new SetListMap();
 
         registerAllManagers();
+        registerEvents();
+        registerCommands();
     }
 
     public void onDisable() {
     }
 
+    public void registerCommands() {
+        new bal(this);
+    }
+
+    private void registerEvents() {
+        new OnPlayerJoinEvent(this);
+        new OnPlayerQuitEvent(this);
+    }
+
     private void registerAllManagers() {
-        this.customConfigManager = new CustomConfigManager(this.plugin);
+        this.customConfigManager = new CustomConfigManager(this);
         this.customConfigManager.registerAllCustomConfigs();
 
-        this.vaultManager = new VaultManager(this.plugin);
+        this.dataManager = new DataManager(this, this.customConfigManager);
+
+        this.vaultManager = new VaultManager(this);
     }
 
     public Main getPlugin() {

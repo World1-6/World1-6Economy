@@ -1,7 +1,7 @@
 package World16Economy.Managers;
 
-import World16Economy.Utils.API;
 import World16Economy.Main.Main;
+import World16Economy.Utils.API;
 import World16Economy.Utils.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

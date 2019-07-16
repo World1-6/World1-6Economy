@@ -2,6 +2,8 @@ package World16Economy.Managers;
 
 import World16Economy.Main.Main;
 import World16Economy.Objects.UserObject;
+import World16Economy.Utils.API;
+import World16Economy.Utils.Translate;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Map;
@@ -27,9 +29,15 @@ public class DataManager {
         }
 
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
+
+        //Create new User.
         if (cs == null) {
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.PREFIX + " " + API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             this.userConfig.getConfig().createSection(uuid.toString());
-            return false;
+            cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
+            cs.set("balance", 0);
+            moneyMap.putIfAbsent(uuid, new UserObject(uuid, 0));
+            return true;
         }
 
         moneyMap.putIfAbsent(uuid, new UserObject(uuid, cs.getLong("balance")));
@@ -37,6 +45,8 @@ public class DataManager {
     }
 
     public boolean saveUserObjectToConfig(UUID uuid) {
+        if (moneyMap.get(uuid) == null) return true;
+
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
         if (cs == null) {
             this.userConfig.getConfig().createSection(uuid.toString());
@@ -44,7 +54,14 @@ public class DataManager {
         }
 
         cs.set("balance", moneyMap.get(uuid).getBalance());
+        this.userConfig.saveConfigSilent();
         return true;
     }
+
+    public boolean isUser(UUID uuid) {
+        ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
+        return cs == null;
+    }
+
 
 }
