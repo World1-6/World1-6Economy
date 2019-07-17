@@ -1,5 +1,6 @@
 package World16Economy.Events;
 
+import World16Economy.CustomExceptions.NoUserDataConfigException;
 import World16Economy.Main.Main;
 import World16Economy.Managers.DataManager;
 import World16Economy.Objects.UserObject;
@@ -32,10 +33,13 @@ public class OnPlayerQuitEvent implements Listener {
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
+    public void onQuit(PlayerQuitEvent event) throws NoUserDataConfigException {
         Player p = event.getPlayer();
 
-        dataManager.saveUserObjectToConfig(p.getUniqueId());
+        if (!dataManager.saveUserObjectToConfig(p.getUniqueId())) {
+            throw new NoUserDataConfigException("The User: " + p.getDisplayName() + " doesn't have a ConfigSection or is not in the HashMap UUID: " + p.getUniqueId());
+        }
+
         moneyMap.remove(p.getUniqueId());
     }
 }

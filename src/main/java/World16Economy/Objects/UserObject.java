@@ -19,8 +19,16 @@ public class UserObject {
         return uuid;
     }
 
-    public double getBalance() {
+    public double getBalanceExact() {
         return balance;
+    }
+
+    public long getBalance() {
+        return balance;
+    }
+
+    public String getBalanceFancy() {
+        return "$" + balance;
     }
 
     public Player getPlayer() {
@@ -47,11 +55,13 @@ public class UserObject {
         this.balance -= number;
     }
 
-    public void multiplicationBalance(long number) {
+    public void multipleBalance(long number) {
         this.balance *= number;
     }
 
-    public boolean checkIfHaveEnough(long number) {
-        return number <= this.balance;
+    public boolean hasEnough(long number) {
+        return number < this.balance;
     }
+
+
 }

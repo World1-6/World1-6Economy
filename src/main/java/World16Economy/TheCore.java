@@ -66,12 +66,12 @@ public class TheCore implements Economy {
 
     @Override
     public boolean hasAccount(String uuid) {
-        return dataManager.isUser(UUID.fromString(uuid));
+        return dataManager.isUserConfig(UUID.fromString(uuid));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return dataManager.isUser(offlinePlayer.getUniqueId());
+        return dataManager.isUserConfig(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -86,12 +86,12 @@ public class TheCore implements Economy {
 
     @Override
     public double getBalance(String uuid) {
-        return dataManager.getUserObjectFromConfig(UUID.fromString(uuid)) ? moneyMap.get(UUID.fromString(uuid)).getBalance() : 0;
+        return dataManager.getUserObjectFromConfig(UUID.fromString(uuid)) ? moneyMap.get(UUID.fromString(uuid)).getBalanceExact() : 0;
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId()) ? moneyMap.get(offlinePlayer.getUniqueId()).getBalance() : 0;
+        return dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId()) ? moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact() : 0;
     }
 
     @Override
@@ -129,12 +129,12 @@ public class TheCore implements Economy {
         Player p = Bukkit.getPlayer(UUID.fromString(uuid));
         if (p != null) {
             if (hasAccount(uuid)) {
-                if (this.moneyMap.get(UUID.fromString(uuid)).checkIfHaveEnough((long) amount)) {
+                if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
-                    return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+                    return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
                 }
                 p.sendMessage(Translate.chat("You do not have enough money dumper."));
-                return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalance(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+                return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
             }
             p.sendMessage(Translate.chat("You do not have an account?"));
             return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
@@ -145,11 +145,11 @@ public class TheCore implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer.getUniqueId().toString())) {
-            if (this.moneyMap.get(offlinePlayer.getUniqueId()).checkIfHaveEnough((long) amount)) {
+            if (this.moneyMap.get(offlinePlayer.getUniqueId()).hasEnough((long) amount)) {
                 this.moneyMap.get(offlinePlayer.getUniqueId()).subtractBalance((long) amount);
-                return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+                return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
             }
-            return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalance(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+            return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
     }
@@ -166,24 +166,28 @@ public class TheCore implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(String uuid, double amount) {
-        Player p = Bukkit.getPlayer(uuid);
-        if (p != null) {
+        Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+
+        if (player != null) {
             if (hasAccount(uuid)) {
                 moneyMap.get(UUID.fromString(uuid)).addBalance((long) amount);
-                p.sendMessage("You have been paid " + amount);
-                return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
+                player.sendMessage("You have been paid " + amount);
+                return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
             } else {
+                player.sendMessage("null yes yes");
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
             }
+        } else {
+            return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Not a player?");
         }
-        return null;
+
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer)) {
             moneyMap.get(offlinePlayer.getUniqueId()).addBalance((long) amount);
-            return new EconomyResponse(amount, moneyMap.get(offlinePlayer.getUniqueId()).getBalance(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
+            return new EconomyResponse(amount, moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
     }

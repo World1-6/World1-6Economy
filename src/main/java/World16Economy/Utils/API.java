@@ -19,4 +19,21 @@ public class API {
         this.plugin = plugin;
     }
 
+    public static boolean isInteger(String numberMaybe) {
+        try {
+            Integer.parseInt(numberMaybe);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isLong(String longMaybe) {
+        try {
+            Long.parseLong(longMaybe);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

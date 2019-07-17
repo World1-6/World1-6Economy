@@ -1,6 +1,7 @@
 package World16Economy.Main;
 
 import World16Economy.Commands.bal;
+import World16Economy.Commands.eco;
 import World16Economy.Events.OnPlayerJoinEvent;
 import World16Economy.Events.OnPlayerQuitEvent;
 import World16Economy.Managers.CustomConfigManager;
@@ -34,6 +35,7 @@ public class Main extends JavaPlugin {
 
     public void registerCommands() {
         new bal(this);
+        new eco(this);
     }
 
     private void registerEvents() {

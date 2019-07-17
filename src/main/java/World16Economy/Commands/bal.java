@@ -43,10 +43,11 @@ public class bal implements CommandExecutor {
 
         if (args.length == 0) {
             if (moneyMap.get(p.getUniqueId()) != null) {
-                p.sendMessage(Translate.chat("&6[Balance] &9Your balance is " + moneyMap.get(p.getUniqueId()).getBalance()));
+                p.sendMessage(Translate.chat("&aBalance:&c " + moneyMap.get(p.getUniqueId()).getBalanceFancy()));
                 return true;
             } else {
                 theCore.hasAccount(p.getUniqueId().toString());
+                return true;
             }
         }
         return true;

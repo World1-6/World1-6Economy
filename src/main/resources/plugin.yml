@@ -5,3 +5,12 @@ depends: [Vault]
 
 commands:
   bal:
+  eco:
+
+permissions:
+  world16.bal:
+    description: Allows you to do bal command
+    default: true
+  world16.eco:
+    description: Allows you to do eco command
+    default: true

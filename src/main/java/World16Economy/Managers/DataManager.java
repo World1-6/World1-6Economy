@@ -32,7 +32,7 @@ public class DataManager {
 
         //Create new User.
         if (cs == null) {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.PREFIX + " " + API.USELESS_TAG + " " + "New User: " + uuid.toString()));
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             this.userConfig.getConfig().createSection(uuid.toString());
             cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
             cs.set("balance", 0);
@@ -45,7 +45,9 @@ public class DataManager {
     }
 
     public boolean saveUserObjectToConfig(UUID uuid) {
-        if (moneyMap.get(uuid) == null) return true;
+        if (moneyMap.get(uuid) == null) {
+            return false;
+        }
 
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
         if (cs == null) {
@@ -53,14 +55,18 @@ public class DataManager {
             return false;
         }
 
-        cs.set("balance", moneyMap.get(uuid).getBalance());
+        cs.set("balance", moneyMap.get(uuid).getBalanceExact());
         this.userConfig.saveConfigSilent();
         return true;
     }
 
-    public boolean isUser(UUID uuid) {
+    public boolean isUserConfig(UUID uuid) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-        return cs == null;
+        return cs != null;
+    }
+
+    public boolean isUserMap(UUID uuid) {
+        return moneyMap.get(uuid) != null;
     }
 
 
