@@ -16,6 +16,9 @@ import java.util.UUID;
 
 public class TheCore implements Economy {
 
+    //So i can remember.
+    //http://milkbowl.github.io/VaultAPI/
+
     private Map<UUID, UserObject> moneyMap;
 
     private Main plugin;
@@ -105,23 +108,34 @@ public class TheCore implements Economy {
     }
 
     @Override
-    public boolean has(String s, double v) {
+    public boolean has(String uuid, double amount) {
+        UUID realuuid = UUID.fromString(uuid);
+        Player target = Bukkit.getPlayer(realuuid);
+
+        if (target != null) {
+            if (hasAccount(uuid) && dataManager.isUserMap(realuuid)) {
+                return moneyMap.get(realuuid).hasEnough((long) amount);
+            }
+        }
         return false;
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, double v) {
+    public boolean has(OfflinePlayer offlinePlayer, double amount) {
+        if (hasAccount(offlinePlayer.getUniqueId().toString()) && dataManager.isUserMap(offlinePlayer.getUniqueId())) {
+            return moneyMap.get(offlinePlayer.getUniqueId()).hasEnough((long) amount);
+        }
         return false;
     }
 
     @Override
-    public boolean has(String s, String s1, double v) {
-        return false;
+    public boolean has(String uuid, String worldName, double amount) {
+        return has(uuid, amount);
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return false;
+    public boolean has(OfflinePlayer offlinePlayer, String worldName, double amount) {
+        return has(offlinePlayer, amount);
     }
 
     @Override

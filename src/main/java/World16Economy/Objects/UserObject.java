@@ -43,10 +43,6 @@ public class UserObject {
         this.balance = balance;
     }
 
-    public boolean ifHasEnough(long number) {
-        return number < this.balance;
-    }
-
     public void addBalance(long number) {
         this.balance += number;
     }
