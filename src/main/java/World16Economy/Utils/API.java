@@ -8,7 +8,7 @@ public class API {
 
     //Finals
     public static final Integer VERSION = 1;
-    public static final String DATE_OF_VERSION = "7/15/2019";
+    public static final String DATE_OF_VERSION = "7/17/2019";
     public static final String PREFIX = "[&9World1-6Economy&r]";
     public static final String USELESS_TAG = "" + PREFIX + "->[&bUSELESS&r]";
     public static final String EMERGENCY_TAG = "" + PREFIX + "->&c[EMERGENCY]&r";
