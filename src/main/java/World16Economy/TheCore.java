@@ -39,7 +39,7 @@ public class TheCore implements Economy {
 
     @Override
     public String getName() {
-        return null;
+        return "World1-6Economy";
     }
 
     @Override
@@ -53,8 +53,8 @@ public class TheCore implements Economy {
     }
 
     @Override
-    public String format(double v) {
-        return null;
+    public String format(double amount) {
+        return "$" + (long) amount;
     }
 
     @Override

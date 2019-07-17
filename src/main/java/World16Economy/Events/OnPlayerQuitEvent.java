@@ -5,6 +5,8 @@ import World16Economy.Main.Main;
 import World16Economy.Managers.DataManager;
 import World16Economy.Objects.UserObject;
 import World16Economy.TheCore;
+import World16Economy.Utils.API;
+import World16Economy.Utils.Translate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +39,8 @@ public class OnPlayerQuitEvent implements Listener {
         Player p = event.getPlayer();
 
         if (!dataManager.saveUserObjectToConfig(p.getUniqueId())) {
-            throw new NoUserDataConfigException("The User: " + p.getDisplayName() + " doesn't have a ConfigSection or is not in the HashMap UUID: " + p.getUniqueId());
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cUser isn't in the HashMap either: A. You reloaded the server. B. You reloaded the plugin with some type of Plugin Manager."));
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &eUser: " + p.getDisplayName() + " UUID: " + p.getUniqueId()));
         }
 
         moneyMap.remove(p.getUniqueId());

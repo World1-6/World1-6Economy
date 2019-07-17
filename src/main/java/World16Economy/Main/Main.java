@@ -62,7 +62,7 @@ public class Main extends JavaPlugin {
         this.reloadConfig();
 
         if (this.getConfig().get("defaultMoney") == null) {
-            this.getConfig().set("defaultMoney", 100);
+            this.getConfig().set("defaultMoney", api.getDEFAULT_MONEY());
             this.saveConfig();
         }
 

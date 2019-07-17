@@ -62,6 +62,10 @@ public class DataManager {
         return true;
     }
 
+    public boolean isUser(UUID uuid) {
+        return isUserConfig(uuid) && isUserMap(uuid);
+    }
+
     public boolean isUserConfig(UUID uuid) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
         return cs != null;
