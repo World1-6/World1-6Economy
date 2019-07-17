@@ -15,6 +15,9 @@ public class API {
     public static final String TOO_DAMN_OLD = "Your mc version is too damn old 1.11 up too 1.14.3 please.";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
 
+    //Config stuff
+    private long DEFAULT_MONEY = 0;
+
     public API(Main plugin) {
         this.plugin = plugin;
     }
@@ -35,5 +38,11 @@ public class API {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    //Getters
+
+    public long getDEFAULT_MONEY() {
+        return DEFAULT_MONEY;
     }
 }

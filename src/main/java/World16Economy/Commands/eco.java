@@ -24,10 +24,12 @@ public class eco implements CommandExecutor {
     private DataManager dataManager;
 
     private TheCore theCore;
+    private API api;
 
     public eco(Main plugin) {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
+        this.api = this.plugin.getApi();
 
         this.dataManager = this.plugin.getDataManager();
         this.theCore = this.plugin.getVaultManager().getTheCore();
@@ -50,11 +52,15 @@ public class eco implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            p.sendMessage(Translate.chat(""));
+            p.sendMessage(Translate.chat("&6/eco give:take/set:reset"));
             return true;
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            if (!p.hasPermission("world16.eco.give")) {
+                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+                return true;
+            }
             String playerString = args[1];
-            Player target = this.plugin.getServer().getPlayerExact(playerString);
+            Player target = this.plugin.getServer().getPlayer(playerString);
             long amount = 0;
 
             if (!API.isLong(args[2])) {
@@ -72,7 +78,74 @@ public class eco implements CommandExecutor {
             }
 
             theCore.depositPlayer(target.getUniqueId().toString(), (double) amount);
-            p.sendMessage(Translate.chat("DONE"));
+            p.sendMessage(Translate.chat("&a$" + amount + " has been added to " + target.getDisplayName() + " account. &9New Balance: &a$" + moneyMap.get(target.getUniqueId()).getBalance()));
+            return true;
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("take")) {
+            if (!p.hasPermission("world16.eco.take")) {
+                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+                return true;
+            }
+            String playerString = args[1];
+            Player target = this.plugin.getServer().getPlayer(playerString);
+            long amount = 0;
+
+            if (!API.isLong(args[2])) {
+                p.sendMessage(Translate.chat("Not a valid long(int)"));
+                return true;
+            }
+
+            amount = Long.parseLong(args[2]);
+
+            if (!targetChecker(p, target)) return true;
+
+            if (amount == 0) {
+                p.sendMessage(Translate.chat("The amount can't be 0?"));
+                return true;
+            }
+
+            theCore.withdrawPlayer(target.getUniqueId().toString(), amount);
+            p.sendMessage(Translate.chat("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + moneyMap.get(target.getUniqueId()).getBalance()));
+            return true;
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
+            if (!p.hasPermission("world16.eco.set")) {
+                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+                return true;
+            }
+            String playerString = args[1];
+            Player target = this.plugin.getServer().getPlayer(playerString);
+            long amount = 0;
+
+            if (!API.isLong(args[2])) {
+                p.sendMessage(Translate.chat("Not a valid long(int)"));
+                return true;
+            }
+
+            amount = Long.parseLong(args[2]);
+
+            if (!targetChecker(p, target)) return true;
+
+            if (amount == 0) {
+                p.sendMessage(Translate.chat("The amount can't be 0?"));
+                return true;
+            }
+
+            moneyMap.get(target.getUniqueId()).setBalance(amount);
+            target.sendMessage(Translate.chat("&aYour balance was set to $" + amount));
+            p.sendMessage(Translate.chat("&aYou set " + target.getDisplayName() + "'s balance to $" + amount));
+            return true;
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
+            if (!p.hasPermission("world16.eco.reset")) {
+                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+                return true;
+            }
+            String playerString = args[1];
+            Player target = this.plugin.getServer().getPlayer(playerString);
+
+            if (!targetChecker(p, target)) return true;
+
+            moneyMap.get(target.getUniqueId()).setBalance(api.getDEFAULT_MONEY());
+            target.sendMessage(Translate.chat("&aYour balance was set to $" + api.getDEFAULT_MONEY()));
+            p.sendMessage(Translate.chat("&aYou set " + target.getDisplayName() + "'s balance to $" + api.getDEFAULT_MONEY()));
             return true;
         }
         return true;

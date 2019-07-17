@@ -7,6 +7,7 @@ import World16Economy.Events.OnPlayerQuitEvent;
 import World16Economy.Managers.CustomConfigManager;
 import World16Economy.Managers.DataManager;
 import World16Economy.Managers.VaultManager;
+import World16Economy.Utils.API;
 import World16Economy.Utils.SetListMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,7 @@ public class Main extends JavaPlugin {
     private Main plugin;
 
     private SetListMap setListMap;
+    private API api;
 
     //Managers
     private CustomConfigManager customConfigManager;
@@ -24,6 +26,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         this.plugin = this;
         this.setListMap = new SetListMap();
+        this.api = new API(this);
 
         registerAllManagers();
         registerEvents();
@@ -70,5 +73,9 @@ public class Main extends JavaPlugin {
 
     public DataManager getDataManager() {
         return dataManager;
+    }
+
+    public API getApi() {
+        return api;
     }
 }

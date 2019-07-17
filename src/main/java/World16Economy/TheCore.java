@@ -131,6 +131,7 @@ public class TheCore implements Economy {
             if (hasAccount(uuid)) {
                 if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
+                    p.sendMessage(Translate.chat("&e$" + amount + " &ahas been taken from your account."));
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
                 } else {
                     p.sendMessage(Translate.chat("You do not have enough money dumper."));
@@ -175,7 +176,7 @@ public class TheCore implements Economy {
         if (player != null) {
             if (hasAccount(uuid)) {
                 moneyMap.get(UUID.fromString(uuid)).addBalance((long) amount);
-                player.sendMessage("You have been paid " + amount);
+                player.sendMessage(Translate.chat("&a$" + amount + " has been added to your account."));
                 return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
             } else {
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
