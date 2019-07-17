@@ -60,7 +60,7 @@ public class UserObject {
     }
 
     public boolean hasEnough(long number) {
-        return number < this.balance;
+        return number <= this.balance;
     }
 
 

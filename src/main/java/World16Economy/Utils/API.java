@@ -45,4 +45,8 @@ public class API {
     public long getDEFAULT_MONEY() {
         return DEFAULT_MONEY;
     }
+
+    public void setDEFAULT_MONEY(long DEFAULT_MONEY) {
+        this.DEFAULT_MONEY = DEFAULT_MONEY;
+    }
 }

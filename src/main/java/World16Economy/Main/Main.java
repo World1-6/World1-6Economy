@@ -29,6 +29,7 @@ public class Main extends JavaPlugin {
         this.api = new API(this);
 
         registerAllManagers();
+        registerDefaultConfig();
         registerEvents();
         registerCommands();
     }
@@ -36,7 +37,7 @@ public class Main extends JavaPlugin {
     public void onDisable() {
     }
 
-    public void registerCommands() {
+    private void registerCommands() {
         new bal(this);
         new eco(this);
     }
@@ -55,6 +56,20 @@ public class Main extends JavaPlugin {
         this.vaultManager = new VaultManager(this);
     }
 
+    private void registerDefaultConfig() {
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
+        this.reloadConfig();
+
+        if (this.getConfig().get("defaultMoney") == null) {
+            this.getConfig().set("defaultMoney", 100);
+            this.saveConfig();
+        }
+
+        this.api.setDEFAULT_MONEY(this.getConfig().getLong("defaultMoney"));
+    }
+
+    //Getter's
     public Main getPlugin() {
         return plugin;
     }

@@ -6,6 +6,7 @@ import World16Economy.Objects.UserObject;
 import World16Economy.TheCore;
 import World16Economy.Utils.API;
 import World16Economy.Utils.Translate;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -103,8 +104,10 @@ public class eco implements CommandExecutor {
                 return true;
             }
 
-            theCore.withdrawPlayer(target.getUniqueId().toString(), amount);
-            p.sendMessage(Translate.chat("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + moneyMap.get(target.getUniqueId()).getBalance()));
+            if (theCore.withdrawPlayer(target.getUniqueId().toString(), amount).type == EconomyResponse.ResponseType.SUCCESS) {
+                p.sendMessage(Translate.chat("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + moneyMap.get(target.getUniqueId()).getBalance()));
+                return true;
+            }
             return true;
         } else if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
             if (!p.hasPermission("world16.eco.set")) {

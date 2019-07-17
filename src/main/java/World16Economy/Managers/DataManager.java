@@ -14,6 +14,7 @@ public class DataManager {
     private Map<UUID, UserObject> moneyMap;
 
     private Main plugin;
+    private API api;
 
     private CustomYmlManager userConfig;
 
@@ -21,6 +22,7 @@ public class DataManager {
         this.plugin = plugin;
         this.userConfig = customConfigManager.getUserData();
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
+        this.api = this.plugin.getApi();
     }
 
     public boolean getUserObjectFromConfig(UUID uuid) {
@@ -35,8 +37,8 @@ public class DataManager {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             this.userConfig.getConfig().createSection(uuid.toString());
             cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-            cs.set("balance", 0);
-            moneyMap.putIfAbsent(uuid, new UserObject(uuid, 0));
+            cs.set("balance", api.getDEFAULT_MONEY());
+            moneyMap.putIfAbsent(uuid, new UserObject(uuid, api.getDEFAULT_MONEY()));
             return true;
         }
 

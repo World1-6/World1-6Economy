@@ -15,26 +15,26 @@ permissions:
     default: true
   world16.bal.other:
     description: Allow you to see other balances of other players
-    default: false
+    default: true
 
   world16.eco:
     description: Allows you to do eco command
-    default: true
+    default: op
   world16.eco.give:
     description: Allows you to do eco give command
-    default: false
+    default: op
   world16.eco.take:
     description: Allows you to do eco take command
-    default: false
+    default: op
   world16.eco.set:
     description: Allows you to do eco set command
-    default: false
+    default: op
   world16.eco.reset:
     description: Allows you to do eco reset command
-    default: false
+    default: op
   world16.eco.op:
     description: Allows you to do eco admin commands
-    default: true
+    default: op
     children:
       world16.eco.give: true
       world16.eco.take: true

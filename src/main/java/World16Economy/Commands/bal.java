@@ -70,7 +70,7 @@ public class bal implements CommandExecutor {
 
             if (!targetChecker(p, target)) return true;
 
-            p.sendMessage(Translate.chat("&aBalance of " + target.getDisplayName() + " is " + moneyMap.get(target.getUniqueId()).getBalance()));
+            p.sendMessage(Translate.chat("&aBalance of " + target.getDisplayName() + " is " + moneyMap.get(target.getUniqueId()).getBalanceFancy()));
         }
         return true;
     }
