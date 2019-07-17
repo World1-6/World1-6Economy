@@ -91,7 +91,7 @@ public class eco implements CommandExecutor {
 
         if (!dataManager.isUserMap(targetPlayer.getUniqueId())) {
             p.sendMessage(Translate.chat("&cIf you see this report this to Andrew121410#2035 on discord&r"));
-            p.sendMessage(this.getClass() + " " + "!dataManager.isUserMap" + " " + "LINE: 73");
+            p.sendMessage(this.getClass() + " " + "!dataManager.isUserMap" + " " + "LINE: 94");
             return false;
         }
         return true;

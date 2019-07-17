@@ -132,24 +132,28 @@ public class TheCore implements Economy {
                 if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+                } else {
+                    p.sendMessage(Translate.chat("You do not have enough money dumper."));
+                    return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
                 }
-                p.sendMessage(Translate.chat("You do not have enough money dumper."));
-                return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+            } else {
+                p.sendMessage(Translate.chat("You do not have an account?"));
+                return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
             }
-            p.sendMessage(Translate.chat("You do not have an account?"));
-            return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
         }
-        return null;
+        return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Not a valid player?");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
         if (hasAccount(offlinePlayer.getUniqueId().toString())) {
+
             if (this.moneyMap.get(offlinePlayer.getUniqueId()).hasEnough((long) amount)) {
                 this.moneyMap.get(offlinePlayer.getUniqueId()).subtractBalance((long) amount);
                 return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+            } else {
+                return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
             }
-            return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
     }
@@ -174,7 +178,6 @@ public class TheCore implements Economy {
                 player.sendMessage("You have been paid " + amount);
                 return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
             } else {
-                player.sendMessage("null yes yes");
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
             }
         } else {
