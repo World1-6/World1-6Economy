@@ -45,7 +45,7 @@ public class OnPlayerQuitEvent implements Listener {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &eUser: " + p.getDisplayName() + " UUID: " + p.getUniqueId()));
         } else {
             if (api.isDEBUG()) {
-                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " User: " + p.getUniqueId() + " The memory for that use just been WIPED since they left the server."));
+                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " User: " + p.getUniqueId() + " The memory for that user has just been WIPED since they left the server."));
             }
             moneyMap.remove(p.getUniqueId());
         }

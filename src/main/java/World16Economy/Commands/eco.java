@@ -171,7 +171,9 @@ public class eco implements CommandExecutor {
 
                 String complete = "&6" + playerNames;
                 p.sendMessage(Translate.chat(complete));
+                return true;
             }
+            return true;
         }
         return true;
     }
