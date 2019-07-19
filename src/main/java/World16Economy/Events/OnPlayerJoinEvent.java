@@ -40,7 +40,7 @@ public class OnPlayerJoinEvent implements Listener {
         Player p = event.getPlayer();
 
         if (api.isDEBUG()) {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " The user has been ADDED to memory since they joined the server."));
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " User: " + p.getUniqueId() + " has been ADDED to memory since they joined the server."));
         }
 
         dataManager.getUserObjectFromConfig(p.getUniqueId());
