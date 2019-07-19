@@ -10,13 +10,15 @@ public class API {
     public static final Integer VERSION = 2;
     public static final String DATE_OF_VERSION = "7/17/2019";
     public static final String PREFIX = "[&9World1-6Economy&r]";
-    public static final String USELESS_TAG = "" + PREFIX + "->[&bUSELESS&r]";
-    public static final String EMERGENCY_TAG = "" + PREFIX + "->&c[EMERGENCY]&r";
+    public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
+    public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";
+    public static final String EMERGENCY_TAG = PREFIX + "->&c[EMERGENCY]&r";
     public static final String TOO_DAMN_OLD = "Your mc version is too damn old 1.11 up too 1.14.3 please.";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong.";
 
     //Config stuff
     private long DEFAULT_MONEY = 100;
+    private boolean DEBUG = false;
 
     public API(Main plugin) {
         this.plugin = plugin;
@@ -48,5 +50,13 @@ public class API {
 
     public void setDEFAULT_MONEY(long DEFAULT_MONEY) {
         this.DEFAULT_MONEY = DEFAULT_MONEY;
+    }
+
+    public boolean isDEBUG() {
+        return DEBUG;
+    }
+
+    public void setDEBUG(boolean DEBUG) {
+        this.DEBUG = DEBUG;
     }
 }

@@ -20,6 +20,7 @@ public class OnPlayerQuitEvent implements Listener {
     private Map<UUID, UserObject> moneyMap;
 
     private Main plugin;
+    private API api;
 
     //Manager's
     private DataManager dataManager;
@@ -30,6 +31,7 @@ public class OnPlayerQuitEvent implements Listener {
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.dataManager = this.plugin.getDataManager();
         this.theCore = this.plugin.getVaultManager().getTheCore();
+        this.api = this.plugin.getApi();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -41,8 +43,13 @@ public class OnPlayerQuitEvent implements Listener {
         if (!dataManager.saveUserObjectToConfig(p.getUniqueId())) {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &cUser isn't in the HashMap either: A. You reloaded the server. B. You reloaded the plugin with some type of Plugin Manager."));
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " &eUser: " + p.getDisplayName() + " UUID: " + p.getUniqueId()));
+        } else {
+            if (api.isDEBUG()) {
+                this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " User: " + p.getUniqueId() + " The memory for that use just been WIPED since they left the server."));
+            }
+            moneyMap.remove(p.getUniqueId());
         }
 
-        moneyMap.remove(p.getUniqueId());
+
     }
 }

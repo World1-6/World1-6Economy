@@ -66,7 +66,13 @@ public class Main extends JavaPlugin {
             this.saveConfig();
         }
 
+        if (this.getConfig().get("debug") == null) {
+            this.getConfig().set("debug", api.isDEBUG());
+            this.saveConfig();
+        }
+
         this.api.setDEFAULT_MONEY(this.getConfig().getLong("defaultMoney"));
+        this.api.setDEBUG(this.getConfig().getBoolean("debug"));
     }
 
     //Getter's

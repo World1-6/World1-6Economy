@@ -7,13 +7,13 @@ import World16Economy.TheCore;
 import World16Economy.Utils.API;
 import World16Economy.Utils.Translate;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class eco implements CommandExecutor {
 
@@ -150,6 +150,28 @@ public class eco implements CommandExecutor {
             target.sendMessage(Translate.chat("&aYour balance was set to $" + api.getDEFAULT_MONEY()));
             p.sendMessage(Translate.chat("&aYou set " + target.getDisplayName() + "'s balance to $" + api.getDEFAULT_MONEY()));
             return true;
+        } else if (args[0].equalsIgnoreCase("debug")) {
+            if (!p.hasPermission("world16.eco.debug")) {
+                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+                return true;
+            }
+            if (args.length == 1) {
+                p.sendMessage(Translate.chat("/eco debug map <List user's in memory>"));
+                return true;
+            }
+            if (args.length == 2 && args[1].equalsIgnoreCase("map")) {
+                Set<UUID> keySet = moneyMap.keySet();
+                Set<String> playerNameSet = new HashSet<>();
+
+                //Changes UUID to playerNames
+                keySet.forEach(k -> playerNameSet.add(Bukkit.getPlayer(k).getDisplayName()));
+                String[] stringArray = playerNameSet.toArray(new String[0]);
+                Arrays.sort(stringArray);
+                String playerNames = String.join(" ", stringArray);
+
+                String complete = "&6" + playerNames;
+                p.sendMessage(Translate.chat(complete));
+            }
         }
         return true;
     }

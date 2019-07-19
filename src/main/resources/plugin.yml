@@ -32,6 +32,9 @@ permissions:
   world16.eco.reset:
     description: Allows you to do eco reset command
     default: op
+  world16.eco.debug:
+    description: Allows you to do eco reset command
+    default: op
   world16.eco.op:
     description: Allows you to do eco admin commands
     default: op
@@ -40,3 +43,4 @@ permissions:
       world16.eco.take: true
       world16.eco.set: true
       world16.eco.reset: true
+      world16.eco.debug: true
