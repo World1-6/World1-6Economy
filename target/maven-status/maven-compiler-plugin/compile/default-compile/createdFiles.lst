@@ -1,0 +1,15 @@
+World16Economy\Main\Main.class
+World16Economy\Managers\VaultManager.class
+World16Economy\CustomExceptions\NoUserDataConfigException.class
+World16Economy\Objects\UserObject.class
+World16Economy\Events\OnPlayerJoinEvent.class
+World16Economy\Utils\API.class
+World16Economy\Managers\CustomYmlManager.class
+World16Economy\Managers\CustomConfigManager.class
+World16Economy\Commands\eco.class
+World16Economy\Utils\SetListMap.class
+World16Economy\Managers\DataManager.class
+World16Economy\Events\OnPlayerQuitEvent.class
+World16Economy\Utils\Translate.class
+World16Economy\Commands\bal.class
+World16Economy\TheCore.class

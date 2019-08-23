@@ -1,11 +1,16 @@
 package World16Economy.Objects;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class UserObject {
+@SerializableAs("UserObject")
+public class UserObject implements ConfigurationSerializable {
 
     private UUID uuid;
     private long balance;
@@ -59,5 +64,15 @@ public class UserObject {
         return number <= this.balance;
     }
 
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("UUID", uuid.toString());
+        map.put("Balance", this.balance);
+        return map;
+    }
 
+    public static UserObject deserialize(Map<String, Object> map) {
+        return new UserObject(UUID.fromString((String) map.get("UUID")), (long) map.get("Balance"));
+    }
 }

@@ -7,11 +7,17 @@ import World16Economy.Events.OnPlayerQuitEvent;
 import World16Economy.Managers.CustomConfigManager;
 import World16Economy.Managers.DataManager;
 import World16Economy.Managers.VaultManager;
+import World16Economy.Objects.UserObject;
 import World16Economy.Utils.API;
 import World16Economy.Utils.SetListMap;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
+
+    static {
+        ConfigurationSerialization.registerClass(UserObject.class, "UserObject");
+    }
 
     private Main plugin;
 

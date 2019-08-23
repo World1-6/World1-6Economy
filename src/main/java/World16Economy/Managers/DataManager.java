@@ -37,12 +37,13 @@ public class DataManager {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             this.userConfig.getConfig().createSection(uuid.toString());
             cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-            cs.set("balance", api.getDEFAULT_MONEY());
-            moneyMap.putIfAbsent(uuid, new UserObject(uuid, api.getDEFAULT_MONEY()));
+            UserObject userObject = new UserObject(uuid, api.getDEFAULT_MONEY());
+            cs.get("UserObject", userObject);
+            moneyMap.putIfAbsent(uuid, userObject);
             return true;
         }
 
-        moneyMap.putIfAbsent(uuid, new UserObject(uuid, cs.getLong("balance")));
+        moneyMap.putIfAbsent(uuid, (UserObject) cs.get("UserObject"));
         return true;
     }
 
@@ -57,7 +58,7 @@ public class DataManager {
             return false;
         }
 
-        cs.set("balance", moneyMap.get(uuid).getBalanceExact());
+        cs.set("UserObject", moneyMap.get(uuid));
         this.userConfig.saveConfigSilent();
         return true;
     }
@@ -74,6 +75,5 @@ public class DataManager {
     public boolean isUserMap(UUID uuid) {
         return moneyMap.get(uuid) != null;
     }
-
 
 }
