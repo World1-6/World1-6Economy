@@ -35,10 +35,9 @@ public class DataManager {
         //Create new User.
         if (cs == null) {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
-            this.userConfig.getConfig().createSection(uuid.toString());
-            cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
+            cs = this.userConfig.getConfig().createSection(uuid.toString());
             UserObject userObject = new UserObject(uuid, api.getDEFAULT_MONEY());
-            cs.get("UserObject", userObject);
+            cs.set("UserObject", userObject);
             moneyMap.putIfAbsent(uuid, userObject);
             return true;
         }
@@ -54,8 +53,7 @@ public class DataManager {
 
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
         if (cs == null) {
-            this.userConfig.getConfig().createSection(uuid.toString());
-            return false;
+            cs = this.userConfig.getConfig().createSection(uuid.toString());
         }
 
         cs.set("UserObject", moneyMap.get(uuid));
