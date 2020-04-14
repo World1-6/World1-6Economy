@@ -2,6 +2,7 @@ package com.andrew121410.mc.world16economy.managers;
 
 
 import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
 
@@ -15,7 +16,7 @@ public class CustomConfigManager {
 
     public void registerAllCustomConfigs() {
         //Data.yml
-        this.userData = new CustomYmlManager(this.plugin);
+        this.userData = new CustomYmlManager(this.plugin, this.plugin.getApi().isDEBUG());
         this.userData.setup("data.yml");
         this.userData.saveConfig();
         this.userData.reloadConfig();
