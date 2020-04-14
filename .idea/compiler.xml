@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="World16Economy" />
+        <module name="World1-6Economy" />
       </profile>
     </annotationProcessing>
   </component>

@@ -1,11 +1,11 @@
-package World16Economy.Commands;
+package com.andrew121410.mc.world16economy.Commands;
 
-import World16Economy.Main.Main;
-import World16Economy.Managers.DataManager;
-import World16Economy.Objects.UserObject;
-import World16Economy.TheCore;
-import World16Economy.Utils.API;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.Managers.DataManager;
+import com.andrew121410.mc.world16economy.Objects.MoneyObject;
+import com.andrew121410.mc.world16economy.Utils.API;
+import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.VaultCore;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class bal implements CommandExecutor {
 
-    private Map<UUID, UserObject> moneyMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Main plugin;
     private API api;
@@ -24,7 +24,7 @@ public class bal implements CommandExecutor {
     //Managers
     private DataManager dataManager;
 
-    private TheCore theCore;
+    private VaultCore vaultCore;
 
     public bal(Main plugin) {
         this.plugin = plugin;
@@ -33,7 +33,7 @@ public class bal implements CommandExecutor {
 
         this.dataManager = this.plugin.getDataManager();
 
-        this.theCore = this.plugin.getVaultManager().getTheCore();
+        this.vaultCore = this.plugin.getVaultManager().getVaultCore();
 
         this.plugin.getCommand("bal").setExecutor(this);
     }
@@ -57,7 +57,7 @@ public class bal implements CommandExecutor {
                 p.sendMessage(Translate.chat("&aBalance:&c " + moneyMap.get(p.getUniqueId()).getBalanceFancy()));
                 return true;
             } else {
-                theCore.hasAccount(p.getUniqueId().toString());
+                vaultCore.hasAccount(p.getUniqueId().toString());
                 return true;
             }
         } else if (args.length == 1) {

@@ -1,4 +1,4 @@
-package World16Economy.Utils;
+package com.andrew121410.mc.world16economy.Utils;
 
 import org.bukkit.ChatColor;
 

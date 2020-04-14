@@ -1,14 +1,14 @@
-package World16Economy.Utils;
+package com.andrew121410.mc.world16economy.Utils;
 
-import World16Economy.Main.Main;
+import com.andrew121410.mc.world16economy.Main;
 
 public class API {
 
     private Main plugin;
 
     //Finals
-    public static final Integer VERSION = 2;
-    public static final String DATE_OF_VERSION = "8/23/2019";
+    public static final Integer VERSION = 3;
+    public static final String DATE_OF_VERSION = "4/13/2020";
     public static final String PREFIX = "[&9World1-6Economy&r]";
     public static final String USELESS_TAG = PREFIX + "->[&bUSELESS&r]";
     public static final String DEBUG_TAG = PREFIX + "->[&eDEBUG&r]";

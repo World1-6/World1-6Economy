@@ -1,11 +1,11 @@
-package World16Economy.Commands;
+package com.andrew121410.mc.world16economy.Commands;
 
-import World16Economy.Main.Main;
-import World16Economy.Managers.DataManager;
-import World16Economy.Objects.UserObject;
-import World16Economy.TheCore;
-import World16Economy.Utils.API;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.Managers.DataManager;
+import com.andrew121410.mc.world16economy.Objects.MoneyObject;
+import com.andrew121410.mc.world16economy.Utils.API;
+import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.VaultCore;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -17,14 +17,14 @@ import java.util.*;
 
 public class eco implements CommandExecutor {
 
-    private Map<UUID, UserObject> moneyMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Main plugin;
 
     //Managers
     private DataManager dataManager;
 
-    private TheCore theCore;
+    private VaultCore vaultCore;
     private API api;
 
     public eco(Main plugin) {
@@ -33,7 +33,7 @@ public class eco implements CommandExecutor {
         this.api = this.plugin.getApi();
 
         this.dataManager = this.plugin.getDataManager();
-        this.theCore = this.plugin.getVaultManager().getTheCore();
+        this.vaultCore = this.plugin.getVaultManager().getVaultCore();
 
         this.plugin.getCommand("eco").setExecutor(this);
     }
@@ -78,7 +78,7 @@ public class eco implements CommandExecutor {
                 return true;
             }
 
-            theCore.depositPlayer(target.getUniqueId().toString(), (double) amount);
+            vaultCore.depositPlayer(target.getUniqueId().toString(), (double) amount);
             p.sendMessage(Translate.chat("&a$" + amount + " has been added to " + target.getDisplayName() + " account. &9New Balance: &a$" + moneyMap.get(target.getUniqueId()).getBalance()));
             return true;
         } else if (args.length == 3 && args[0].equalsIgnoreCase("take")) {
@@ -104,7 +104,7 @@ public class eco implements CommandExecutor {
                 return true;
             }
 
-            if (theCore.withdrawPlayer(target.getUniqueId().toString(), amount).type == EconomyResponse.ResponseType.SUCCESS) {
+            if (vaultCore.withdrawPlayer(target.getUniqueId().toString(), amount).type == EconomyResponse.ResponseType.SUCCESS) {
                 p.sendMessage(Translate.chat("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + moneyMap.get(target.getUniqueId()).getBalance()));
                 return true;
             }

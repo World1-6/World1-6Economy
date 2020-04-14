@@ -1,11 +1,11 @@
-package World16Economy.Events;
+package com.andrew121410.mc.world16economy.Events;
 
-import World16Economy.Main.Main;
-import World16Economy.Managers.DataManager;
-import World16Economy.Objects.UserObject;
-import World16Economy.TheCore;
-import World16Economy.Utils.API;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.Managers.DataManager;
+import com.andrew121410.mc.world16economy.Objects.MoneyObject;
+import com.andrew121410.mc.world16economy.Utils.API;
+import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.VaultCore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,20 +16,20 @@ import java.util.UUID;
 
 public class OnPlayerJoinEvent implements Listener {
 
-    private Map<UUID, UserObject> moneyMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Main plugin;
     private API api;
 
     //Manager's
     private DataManager dataManager;
-    private TheCore theCore;
+    private VaultCore vaultCore;
 
     public OnPlayerJoinEvent(Main plugin) {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.dataManager = this.plugin.getDataManager();
-        this.theCore = this.plugin.getVaultManager().getTheCore();
+        this.vaultCore = this.plugin.getVaultManager().getVaultCore();
         this.api = this.plugin.getApi();
 
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
@@ -43,6 +43,6 @@ public class OnPlayerJoinEvent implements Listener {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.DEBUG_TAG + " User: " + p.getUniqueId() + " has been ADDED to memory since they joined the server."));
         }
 
-        dataManager.getUserObjectFromConfig(p.getUniqueId());
+        dataManager.load(p);
     }
 }

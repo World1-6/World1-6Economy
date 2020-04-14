@@ -1,5 +1,5 @@
 name: World1-6Economy
-main: World16Economy.Main.Main
+main: com.andrew121410.mc.world16economy.Main
 version: 1
 depends: [Vault]
 

@@ -1,4 +1,4 @@
-package World16Economy.Objects;
+package com.andrew121410.mc.world16economy.Objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @SerializableAs("UserObject")
-public class UserObject implements ConfigurationSerializable {
+public class MoneyObject implements ConfigurationSerializable {
 
     private UUID uuid;
     private long balance;
 
-    public UserObject(UUID uuid, long balance) {
+    public MoneyObject(UUID uuid, long balance) {
         this.uuid = uuid;
         this.balance = balance;
     }
@@ -72,7 +72,7 @@ public class UserObject implements ConfigurationSerializable {
         return map;
     }
 
-    public static UserObject deserialize(Map<String, Object> map) {
-        return new UserObject(UUID.fromString((String) map.get("UUID")), (long) map.get("Balance"));
+    public static MoneyObject deserialize(Map<String, Object> map) {
+        return new MoneyObject(UUID.fromString((String) map.get("UUID")), (long) map.get("Balance"));
     }
 }

@@ -1,6 +1,7 @@
-package World16Economy.Managers;
+package com.andrew121410.mc.world16economy.Managers;
 
-import World16Economy.Main.Main;
+
+import com.andrew121410.mc.world16economy.Main;
 
 public class CustomConfigManager {
 

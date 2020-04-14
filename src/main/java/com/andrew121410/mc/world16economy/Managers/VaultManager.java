@@ -1,20 +1,20 @@
-package World16Economy.Managers;
+package com.andrew121410.mc.world16economy.Managers;
 
-import World16Economy.Main.Main;
-import World16Economy.TheCore;
-import World16Economy.Utils.API;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.Utils.API;
+import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.VaultCore;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.ServicePriority;
 
 public class VaultManager {
 
-    private TheCore theCore;
+    private VaultCore vaultCore;
     private Main plugin;
 
     public VaultManager(Main plugin) {
         this.plugin = plugin;
-        this.theCore = new TheCore(this.plugin);
+        this.vaultCore = new VaultCore(this.plugin);
 
         setupEconomy();
     }
@@ -24,12 +24,12 @@ public class VaultManager {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.EMERGENCY_TAG + " " + "&cVault was not found?"));
             this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
         }
-        this.plugin.getServer().getServicesManager().register(Economy.class, theCore, this.plugin, ServicePriority.Low);
+        this.plugin.getServer().getServicesManager().register(Economy.class, vaultCore, this.plugin, ServicePriority.Low);
         this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "&aVault was found."));
     }
 
-    public TheCore getTheCore() {
-        return theCore;
+    public VaultCore getVaultCore() {
+        return vaultCore;
     }
 
     public Main getPlugin() {

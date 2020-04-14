@@ -1,64 +1,61 @@
-package World16Economy.Managers;
+package com.andrew121410.mc.world16economy.Managers;
 
-import World16Economy.Main.Main;
-import World16Economy.Objects.UserObject;
-import World16Economy.Utils.API;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.Objects.MoneyObject;
+import com.andrew121410.mc.world16economy.Utils.API;
+import com.andrew121410.mc.world16economy.Utils.Translate;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
 
 public class DataManager {
 
-    private Map<UUID, UserObject> moneyMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Main plugin;
-    private API api;
-
     private CustomYmlManager userConfig;
+
+    private API api;
 
     public DataManager(Main plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
         this.userConfig = customConfigManager.getUserData();
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
-        this.api = this.plugin.getApi();
     }
 
-    public boolean getUserObjectFromConfig(UUID uuid) {
-        if (moneyMap.get(uuid) != null) {
-            return true;
-        }
+    public void load(Player player) {
+        MoneyObject moneyObject = get(player.getUniqueId());
+        this.moneyMap.putIfAbsent(player.getUniqueId(), moneyObject);
+    }
 
+    public void save(Player player) {
+        save(player.getUniqueId(), moneyMap.get(player.getUniqueId()));
+        this.moneyMap.remove(player.getUniqueId());
+    }
+
+    public MoneyObject get(UUID uuid) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
 
         //Create new User.
         if (cs == null) {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             cs = this.userConfig.getConfig().createSection(uuid.toString());
-            UserObject userObject = new UserObject(uuid, api.getDEFAULT_MONEY());
-            cs.set("UserObject", userObject);
-            moneyMap.putIfAbsent(uuid, userObject);
-            return true;
+            MoneyObject userObject = new MoneyObject(uuid, this.api.getDEFAULT_MONEY());
+            cs.set("MoneyObject", userObject);
+            return userObject;
         }
 
-        moneyMap.putIfAbsent(uuid, (UserObject) cs.get("UserObject"));
-        return true;
+        return (MoneyObject) cs.get("MoneyObject");
     }
 
-    public boolean saveUserObjectToConfig(UUID uuid) {
-        if (moneyMap.get(uuid) == null) {
-            return false;
-        }
-
+    public void save(UUID uuid, MoneyObject moneyObject) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-        if (cs == null) {
-            cs = this.userConfig.getConfig().createSection(uuid.toString());
-        }
-
-        cs.set("UserObject", moneyMap.get(uuid));
-        this.userConfig.saveConfigSilent();
-        return true;
+        if (cs == null) cs = this.userConfig.getConfig().createSection(uuid.toString());
+        cs.set("MoneyObject", moneyObject);
+        this.userConfig.saveConfig();
     }
 
     public boolean isUser(UUID uuid) {
@@ -73,5 +70,4 @@ public class DataManager {
     public boolean isUserMap(UUID uuid) {
         return moneyMap.get(uuid) != null;
     }
-
 }
