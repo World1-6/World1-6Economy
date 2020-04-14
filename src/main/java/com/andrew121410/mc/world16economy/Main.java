@@ -1,15 +1,15 @@
 package com.andrew121410.mc.world16economy;
 
-import com.andrew121410.mc.world16economy.Commands.bal;
-import com.andrew121410.mc.world16economy.Commands.eco;
-import com.andrew121410.mc.world16economy.Events.OnPlayerJoinEvent;
-import com.andrew121410.mc.world16economy.Events.OnPlayerQuitEvent;
-import com.andrew121410.mc.world16economy.Managers.CustomConfigManager;
-import com.andrew121410.mc.world16economy.Managers.DataManager;
-import com.andrew121410.mc.world16economy.Managers.VaultManager;
-import com.andrew121410.mc.world16economy.Objects.MoneyObject;
-import com.andrew121410.mc.world16economy.Utils.API;
-import com.andrew121410.mc.world16economy.Utils.SetListMap;
+import com.andrew121410.mc.world16economy.commands.bal;
+import com.andrew121410.mc.world16economy.commands.eco;
+import com.andrew121410.mc.world16economy.events.OnPlayerJoinEvent;
+import com.andrew121410.mc.world16economy.events.OnPlayerQuitEvent;
+import com.andrew121410.mc.world16economy.managers.CustomConfigManager;
+import com.andrew121410.mc.world16economy.managers.DataManager;
+import com.andrew121410.mc.world16economy.managers.VaultManager;
+import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.utils.SetListMap;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16economy.CustomExceptions;
+package com.andrew121410.mc.world16economy.customexceptions;
 
 public class NoUserDataConfigException extends Exception {
 

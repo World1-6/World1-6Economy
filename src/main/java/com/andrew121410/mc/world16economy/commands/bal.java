@@ -1,10 +1,10 @@
-package com.andrew121410.mc.world16economy.Commands;
+package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.Main;
-import com.andrew121410.mc.world16economy.Managers.DataManager;
-import com.andrew121410.mc.world16economy.Objects.MoneyObject;
-import com.andrew121410.mc.world16economy.Utils.API;
-import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.managers.DataManager;
+import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.utils.Translate;
 import com.andrew121410.mc.world16economy.VaultCore;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

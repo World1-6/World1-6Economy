@@ -1,9 +1,9 @@
-package World16Economy;
+package com.andrew121410.mc.world16economy;
 
-import World16Economy.Main.Main;
-import World16Economy.Managers.DataManager;
-import World16Economy.Objects.UserObject;
-import World16Economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.managers.DataManager;
+import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.utils.Translate;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -14,20 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class TheCore implements Economy {
+public class VaultCore implements Economy {
 
     //So i can remember.
     //http://milkbowl.github.io/VaultAPI/
 
-    private Map<UUID, UserObject> moneyMap;
+    private Map<UUID, MoneyObject> moneyMap;
 
     private Main plugin;
-
-    //Managers
     private DataManager dataManager;
+    private API api;
 
-    public TheCore(Main plugin) {
+    public VaultCore(Main plugin) {
         this.plugin = plugin;
+        this.api = this.plugin.getApi();
         this.dataManager = this.plugin.getDataManager();
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
     }
@@ -69,7 +69,7 @@ public class TheCore implements Economy {
 
     @Override
     public boolean hasAccount(String uuid) {
-        return dataManager.isUserConfig(UUID.fromString(uuid));
+        return dataManager.isUser(UUID.fromString(uuid));
     }
 
     @Override
@@ -89,12 +89,13 @@ public class TheCore implements Economy {
 
     @Override
     public double getBalance(String uuid) {
-        return dataManager.getUserObjectFromConfig(UUID.fromString(uuid)) ? moneyMap.get(UUID.fromString(uuid)).getBalanceExact() : 0;
+        return moneyMap.get(UUID.fromString(uuid)).getBalanceExact();
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId()) ? moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact() : 0;
+        MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
+        return moneyObject != null ? moneyObject.getBalanceExact() : 0;
     }
 
     @Override
@@ -109,12 +110,12 @@ public class TheCore implements Economy {
 
     @Override
     public boolean has(String uuid, double amount) {
-        UUID realuuid = UUID.fromString(uuid);
-        Player target = Bukkit.getPlayer(realuuid);
+        UUID realUUID = UUID.fromString(uuid);
+        Player target = Bukkit.getPlayer(realUUID);
 
         if (target != null) {
             if (dataManager.isUser(UUID.fromString(uuid))) {
-                return moneyMap.get(realuuid).hasEnough((long) amount);
+                return moneyMap.get(realUUID).hasEnough((long) amount);
             }
         }
         return false;
@@ -122,8 +123,9 @@ public class TheCore implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUser(offlinePlayer.getUniqueId())) {
-            return moneyMap.get(offlinePlayer.getUniqueId()).hasEnough((long) amount);
+        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
+            return moneyObject.hasEnough((long) amount);
         }
         return false;
     }
@@ -140,19 +142,19 @@ public class TheCore implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String uuid, double amount) {
-        Player p = Bukkit.getPlayer(UUID.fromString(uuid));
-        if (p != null) {
+        Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+        if (player != null) {
             if (dataManager.isUser(UUID.fromString(uuid))) {
                 if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
-                    p.sendMessage(Translate.chat("&e$" + (long) amount + " &ahas been taken from your account."));
+                    player.sendMessage(Translate.chat("&e$" + (long) amount + " &ahas been taken from your account."));
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
                 } else {
-                    p.sendMessage(Translate.chat("You do not have enough money dumper."));
+                    player.sendMessage(Translate.chat("You do not have enough money dumper."));
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
                 }
             } else {
-                p.sendMessage(Translate.chat("You do not have an account?"));
+                player.sendMessage(Translate.chat("You do not have an account?"));
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
             }
         }
@@ -161,13 +163,14 @@ public class TheCore implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUser(offlinePlayer.getUniqueId())) {
-
-            if (this.moneyMap.get(offlinePlayer.getUniqueId()).hasEnough((long) amount)) {
-                this.moneyMap.get(offlinePlayer.getUniqueId()).subtractBalance((long) amount);
-                return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
+            if (moneyObject.hasEnough((long) amount)) {
+                moneyObject.subtractBalance((long) amount);
+                dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
+                return new EconomyResponse(amount, moneyObject.getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
             } else {
-                return new EconomyResponse(amount, this.moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+                return new EconomyResponse(amount, moneyObject.getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
             }
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
@@ -198,13 +201,14 @@ public class TheCore implements Economy {
         } else {
             return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Not a player?");
         }
-
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUser(offlinePlayer.getUniqueId())) {
-            moneyMap.get(offlinePlayer.getUniqueId()).addBalance((long) amount);
+        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            MoneyObject moneyObject = this.dataManager.get(offlinePlayer.getUniqueId());
+            moneyObject.addBalance((long) amount);
+            this.dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
             return new EconomyResponse(amount, moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
@@ -283,7 +287,7 @@ public class TheCore implements Economy {
     @Override
     public boolean createPlayerAccount(String uuid) {
         if (!hasAccount(uuid)) {
-            dataManager.getUserObjectFromConfig(UUID.fromString(uuid));
+            dataManager.get(UUID.fromString(uuid));
             return true;
         }
         return false;
@@ -291,8 +295,9 @@ public class TheCore implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        if (!hasAccount(String.valueOf(offlinePlayer.getUniqueId()))) {
-            dataManager.getUserObjectFromConfig(offlinePlayer.getUniqueId());
+        if (!hasAccount(offlinePlayer)) {
+            MoneyObject moneyObject = new MoneyObject(offlinePlayer.getUniqueId(), this.api.getDEFAULT_MONEY());
+            this.dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
             return true;
         }
         return false;

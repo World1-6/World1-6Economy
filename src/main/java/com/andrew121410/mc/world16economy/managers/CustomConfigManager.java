@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16economy.Managers;
+package com.andrew121410.mc.world16economy.managers;
 
 
 import com.andrew121410.mc.world16economy.Main;

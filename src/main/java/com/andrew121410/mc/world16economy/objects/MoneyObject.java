@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16economy.Objects;
+package com.andrew121410.mc.world16economy.objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

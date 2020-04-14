@@ -1,8 +1,8 @@
-package com.andrew121410.mc.world16economy.Managers;
+package com.andrew121410.mc.world16economy.managers;
 
 import com.andrew121410.mc.world16economy.Main;
-import com.andrew121410.mc.world16economy.Utils.API;
-import com.andrew121410.mc.world16economy.Utils.Translate;
+import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.utils.Translate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

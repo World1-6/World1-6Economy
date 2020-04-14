@@ -1,7 +1,7 @@
-package com.andrew121410.mc.world16economy.Utils;
+package com.andrew121410.mc.world16economy.utils;
 
 
-import com.andrew121410.mc.world16economy.Objects.MoneyObject;
+import com.andrew121410.mc.world16economy.objects.MoneyObject;
 
 import java.util.HashMap;
 import java.util.Map;
