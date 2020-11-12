@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16economy.managers;
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
 import com.andrew121410.mc.world16economy.utils.Translate;
@@ -15,12 +15,12 @@ public class DataManager {
 
     private Map<UUID, MoneyObject> moneyMap;
 
-    private Main plugin;
+    private World16Economy plugin;
     private CustomYmlManager userConfig;
 
     private API api;
 
-    public DataManager(Main plugin, CustomConfigManager customConfigManager) {
+    public DataManager(World16Economy plugin, CustomConfigManager customConfigManager) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
         this.userConfig = customConfigManager.getUserData();
@@ -69,6 +69,6 @@ public class DataManager {
     }
 
     public boolean isUserMap(UUID uuid) {
-        return moneyMap.get(uuid) != null;
+        return this.moneyMap.containsKey(uuid);
     }
 }

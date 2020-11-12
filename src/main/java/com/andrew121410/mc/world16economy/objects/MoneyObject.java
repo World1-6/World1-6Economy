@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SerializableAs("UserObject")
+@SerializableAs("MoneyObject")
 public class MoneyObject implements ConfigurationSerializable {
 
     private UUID uuid;

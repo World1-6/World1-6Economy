@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16economy.events;
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.managers.DataManager;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
@@ -16,13 +16,13 @@ public class OnPlayerQuitEvent implements Listener {
 
     private Map<UUID, MoneyObject> moneyMap;
 
-    private Main plugin;
+    private World16Economy plugin;
     private API api;
 
     //Manager's
     private DataManager dataManager;
 
-    public OnPlayerQuitEvent(Main plugin) {
+    public OnPlayerQuitEvent(World16Economy plugin) {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.dataManager = this.plugin.getDataManager();

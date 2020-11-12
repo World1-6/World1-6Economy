@@ -1,16 +1,16 @@
 package com.andrew121410.mc.world16economy.managers;
 
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 
 public class CustomConfigManager {
 
-    private Main plugin;
+    private World16Economy plugin;
 
     private CustomYmlManager userData;
 
-    public CustomConfigManager(Main plugin) {
+    public CustomConfigManager(World16Economy plugin) {
         this.plugin = plugin;
     }
 
@@ -23,7 +23,7 @@ public class CustomConfigManager {
         //...
     }
 
-    public Main getPlugin() {
+    public World16Economy getPlugin() {
         return plugin;
     }
 

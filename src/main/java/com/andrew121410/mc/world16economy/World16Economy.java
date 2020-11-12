@@ -13,13 +13,13 @@ import com.andrew121410.mc.world16economy.utils.SetListMap;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
+public class World16Economy extends JavaPlugin {
 
     static {
-        ConfigurationSerialization.registerClass(MoneyObject.class, "UserObject");
+        ConfigurationSerialization.registerClass(MoneyObject.class, "MoneyObject");
     }
 
-    private Main plugin;
+    private static World16Economy plugin;
 
     private SetListMap setListMap;
     private API api;
@@ -30,7 +30,7 @@ public class Main extends JavaPlugin {
     private DataManager dataManager;
 
     public void onEnable() {
-        this.plugin = this;
+        plugin = this;
         this.setListMap = new SetListMap();
         this.api = new API(this);
 
@@ -81,8 +81,7 @@ public class Main extends JavaPlugin {
         this.api.setDEBUG(this.getConfig().getBoolean("debug"));
     }
 
-    //Getter's
-    public Main getPlugin() {
+    public static World16Economy getPlugin() {
         return plugin;
     }
 

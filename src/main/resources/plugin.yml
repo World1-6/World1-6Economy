@@ -1,7 +1,8 @@
 name: World1-6Economy
-main: com.andrew121410.mc.world16economy.Main
-version: 1
-depends: [Vault]
+main: com.andrew121410.mc.world16economy.World16Economy
+version: 1.0
+depends: [ Vault ]
+api-version: 1.16
 
 commands:
   bal:

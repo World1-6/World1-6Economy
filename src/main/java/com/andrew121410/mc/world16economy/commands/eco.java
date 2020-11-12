@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16economy.commands;
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.managers.DataManager;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
@@ -19,7 +19,7 @@ public class eco implements CommandExecutor {
 
     private Map<UUID, MoneyObject> moneyMap;
 
-    private Main plugin;
+    private World16Economy plugin;
 
     //Managers
     private DataManager dataManager;
@@ -27,7 +27,7 @@ public class eco implements CommandExecutor {
     private VaultCore vaultCore;
     private API api;
 
-    public eco(Main plugin) {
+    public eco(World16Economy plugin) {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.api = this.plugin.getApi();

@@ -1,6 +1,6 @@
 package com.andrew121410.mc.world16economy.commands;
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.managers.DataManager;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
@@ -18,7 +18,7 @@ public class bal implements CommandExecutor {
 
     private Map<UUID, MoneyObject> moneyMap;
 
-    private Main plugin;
+    private World16Economy plugin;
     private API api;
 
     //Managers
@@ -26,7 +26,7 @@ public class bal implements CommandExecutor {
 
     private VaultCore vaultCore;
 
-    public bal(Main plugin) {
+    public bal(World16Economy plugin) {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.api = this.plugin.getApi();

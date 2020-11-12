@@ -21,11 +21,11 @@ public class VaultCore implements Economy {
 
     private Map<UUID, MoneyObject> moneyMap;
 
-    private Main plugin;
+    private World16Economy plugin;
     private DataManager dataManager;
     private API api;
 
-    public VaultCore(Main plugin) {
+    public VaultCore(World16Economy plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
         this.dataManager = this.plugin.getDataManager();

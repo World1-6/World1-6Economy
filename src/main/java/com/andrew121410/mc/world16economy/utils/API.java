@@ -1,10 +1,10 @@
 package com.andrew121410.mc.world16economy.utils;
 
-import com.andrew121410.mc.world16economy.Main;
+import com.andrew121410.mc.world16economy.World16Economy;
 
 public class API {
 
-    private Main plugin;
+    private World16Economy plugin;
 
     //Finals
     public static final Integer VERSION = 3;
@@ -20,7 +20,7 @@ public class API {
     private long DEFAULT_MONEY = 100;
     private boolean DEBUG = false;
 
-    public API(Main plugin) {
+    public API(World16Economy plugin) {
         this.plugin = plugin;
     }
 
