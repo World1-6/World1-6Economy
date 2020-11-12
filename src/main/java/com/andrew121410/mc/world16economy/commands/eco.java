@@ -52,7 +52,6 @@ public class eco implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.sendMessage(Translate.color("&6/eco give:take/set:reset"));
             player.sendMessage(Translate.color("&6/eco give <Player> <Amount>"));
             player.sendMessage(Translate.color("&6/eco take <Player> <Amount>"));
             player.sendMessage(Translate.color("&6/eco set <Player> <Amount>"));
