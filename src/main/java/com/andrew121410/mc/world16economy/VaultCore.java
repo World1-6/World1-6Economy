@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16economy;
 import com.andrew121410.mc.world16economy.managers.DataManager;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
-import com.andrew121410.mc.world16economy.utils.Translate;
+import com.andrew121410.mc.world16utils.chat.Translate;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -147,14 +147,14 @@ public class VaultCore implements Economy {
             if (dataManager.isUser(UUID.fromString(uuid))) {
                 if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
-                    player.sendMessage(Translate.chat("&e$" + (long) amount + " &ahas been taken from your account."));
+                    player.sendMessage(Translate.color("&e$" + (long) amount + " &ahas been taken from your account."));
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
                 } else {
-                    player.sendMessage(Translate.chat("You do not have enough money dumper."));
+                    player.sendMessage(Translate.color("You do not have enough money dumper."));
                     return new EconomyResponse(amount, this.moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
                 }
             } else {
-                player.sendMessage(Translate.chat("You do not have an account?"));
+                player.sendMessage(Translate.color("You do not have an account?"));
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
             }
         }
@@ -193,7 +193,7 @@ public class VaultCore implements Economy {
         if (player != null) {
             if (dataManager.isUser(UUID.fromString(uuid))) {
                 moneyMap.get(UUID.fromString(uuid)).addBalance((long) amount);
-                player.sendMessage(Translate.chat("&a$" + (long) amount + " has been added to your account."));
+                player.sendMessage(Translate.color("&a$" + (long) amount + " has been added to your account."));
                 return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
             } else {
                 return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
@@ -296,7 +296,7 @@ public class VaultCore implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
         if (!hasAccount(offlinePlayer)) {
-            MoneyObject moneyObject = new MoneyObject(offlinePlayer.getUniqueId(), this.api.getDEFAULT_MONEY());
+            MoneyObject moneyObject = new MoneyObject(offlinePlayer.getUniqueId(), this.api.getDefaultMoney());
             this.dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
             return true;
         }

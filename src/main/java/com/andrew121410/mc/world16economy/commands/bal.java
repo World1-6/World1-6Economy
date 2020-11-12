@@ -1,11 +1,11 @@
 package com.andrew121410.mc.world16economy.commands;
 
+import com.andrew121410.mc.world16economy.VaultCore;
 import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.managers.DataManager;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
-import com.andrew121410.mc.world16economy.utils.Translate;
-import com.andrew121410.mc.world16economy.VaultCore;
+import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,9 +30,7 @@ public class bal implements CommandExecutor {
         this.plugin = plugin;
         this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
         this.api = this.plugin.getApi();
-
         this.dataManager = this.plugin.getDataManager();
-
         this.vaultCore = this.plugin.getVaultManager().getVaultCore();
 
         this.plugin.getCommand("bal").setExecutor(this);
@@ -44,52 +42,45 @@ public class bal implements CommandExecutor {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
+        Player player = (Player) sender;
 
-        Player p = (Player) sender;
-
-        if (!p.hasPermission("world16.bal")) {
-            p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+        if (!player.hasPermission("world16.bal")) {
+            player.sendMessage(Translate.color("&cYou do not have permission to use this command."));
             return true;
         }
 
         if (args.length == 0) {
-            if (moneyMap.get(p.getUniqueId()) != null) {
-                p.sendMessage(Translate.chat("&aBalance:&c " + moneyMap.get(p.getUniqueId()).getBalanceFancy()));
-                return true;
+            if (this.moneyMap.containsKey(player.getUniqueId())) {
+                player.sendMessage(Translate.color("&aBalance:&c " + moneyMap.get(player.getUniqueId()).getBalanceFancy()));
             } else {
-                vaultCore.hasAccount(p.getUniqueId().toString());
-                return true;
+                vaultCore.hasAccount(player.getUniqueId().toString());
             }
+            return true;
         } else if (args.length == 1) {
-            if (!p.hasPermission("world16.bal.other")) {
-                p.sendMessage(Translate.chat("&cYou do not have permission to use this command."));
+            if (!player.hasPermission("world16.bal.other")) {
+                player.sendMessage(Translate.color("&cYou do not have permission to use this command."));
                 return true;
             }
-            String playerString = args[0];
-            Player target = this.plugin.getServer().getPlayer(playerString);
+            Player target = this.plugin.getServer().getPlayer(args[0]);
 
-            if (!targetChecker(p, target)) return true;
+            if (!targetChecker(player, target)) return true;
 
-            p.sendMessage(Translate.chat("&aBalance of " + target.getDisplayName() + " is " + moneyMap.get(target.getUniqueId()).getBalanceFancy()));
+            player.sendMessage(Translate.color("&aBalance of " + target.getDisplayName() + " is " + moneyMap.get(target.getUniqueId()).getBalanceFancy()));
         }
         return true;
     }
 
-    private Boolean targetChecker(Player p, Player targetPlayer) {
+    private Boolean targetChecker(Player player, Player targetPlayer) {
         if (targetPlayer == null) {
-            p.sendMessage(Translate.chat("I'm a 100% sure that isn't a player?"));
+            player.sendMessage(Translate.color("&cThat isn't a valid player."));
             return false;
         }
-
         if (!targetPlayer.isOnline()) {
-            p.sendMessage(Translate.chat("That Player isn't online?"));
+            player.sendMessage(Translate.color("7cLooks like the player isn't online."));
             return false;
         }
-
         if (!dataManager.isUserMap(targetPlayer.getUniqueId())) {
-            p.sendMessage(Translate.chat("&cIf you see this report this to Andrew121410#2035 on discord&r"));
-            p.sendMessage(this.getClass() + " " + "!dataManager.isUserMap" + " " + "LINE: 94");
-            return false;
+            throw new NullPointerException("User isn't in memory?");
         }
         return true;
     }

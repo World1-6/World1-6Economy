@@ -3,7 +3,7 @@ package com.andrew121410.mc.world16economy.managers;
 import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.objects.MoneyObject;
 import com.andrew121410.mc.world16economy.utils.API;
-import com.andrew121410.mc.world16economy.utils.Translate;
+import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.config.CustomYmlManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -42,9 +42,9 @@ public class DataManager {
 
         //Create new User.
         if (cs == null) {
-            this.plugin.getServer().getConsoleSender().sendMessage(Translate.chat(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
+            this.plugin.getServer().getConsoleSender().sendMessage(Translate.color(API.USELESS_TAG + " " + "New User: " + uuid.toString()));
             cs = this.userConfig.getConfig().createSection(uuid.toString());
-            MoneyObject userObject = new MoneyObject(uuid, this.api.getDEFAULT_MONEY());
+            MoneyObject userObject = new MoneyObject(uuid, this.api.getDefaultMoney());
             cs.set("MoneyObject", userObject);
             return userObject;
         }

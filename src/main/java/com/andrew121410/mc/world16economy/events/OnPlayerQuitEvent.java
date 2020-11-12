@@ -36,6 +36,5 @@ public class OnPlayerQuitEvent implements Listener {
         Player player = event.getPlayer();
 
         this.dataManager.save(player);
-        this.moneyMap.remove(player.getUniqueId());
     }
 }
