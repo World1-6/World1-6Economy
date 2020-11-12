@@ -16,7 +16,7 @@ public class CustomConfigManager {
 
     public void registerAllCustomConfigs() {
         //Data.yml
-        this.userData = new CustomYmlManager(this.plugin, this.plugin.getApi().isDEBUG());
+        this.userData = new CustomYmlManager(this.plugin, this.plugin.getApi().isDebug());
         this.userData.setup("data.yml");
         this.userData.saveConfig();
         this.userData.reloadConfig();

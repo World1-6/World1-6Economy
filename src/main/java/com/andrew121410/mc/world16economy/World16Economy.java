@@ -68,17 +68,17 @@ public class World16Economy extends JavaPlugin {
         this.reloadConfig();
 
         if (this.getConfig().get("defaultMoney") == null) {
-            this.getConfig().set("defaultMoney", api.getDEFAULT_MONEY());
+            this.getConfig().set("defaultMoney", api.getDefaultMoney());
             this.saveConfig();
         }
 
         if (this.getConfig().get("debug") == null) {
-            this.getConfig().set("debug", api.isDEBUG());
+            this.getConfig().set("debug", api.isDebug());
             this.saveConfig();
         }
 
-        this.api.setDEFAULT_MONEY(this.getConfig().getLong("defaultMoney"));
-        this.api.setDEBUG(this.getConfig().getBoolean("debug"));
+        this.api.setDefaultMoney(this.getConfig().getLong("defaultMoney"));
+        this.api.setDebug(this.getConfig().getBoolean("debug"));
     }
 
     public static World16Economy getPlugin() {
