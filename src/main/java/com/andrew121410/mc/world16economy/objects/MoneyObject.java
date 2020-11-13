@@ -73,6 +73,6 @@ public class MoneyObject implements ConfigurationSerializable {
     }
 
     public static MoneyObject deserialize(Map<String, Object> map) {
-        return new MoneyObject(UUID.fromString((String) map.get("UUID")), (long) map.get("Balance"));
+        return new MoneyObject(UUID.fromString((String) map.get("UUID")), ((Number) map.get("Balance")).longValue());
     }
 }
