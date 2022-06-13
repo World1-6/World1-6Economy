@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.VaultCore;
 import com.andrew121410.mc.world16economy.World16Economy;
-import com.andrew121410.mc.world16economy.managers.DataManager;
-import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.managers.UserWalletManager;
+import com.andrew121410.mc.world16economy.objects.UserWallet;
 import com.andrew121410.mc.world16economy.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.Utils;
@@ -18,21 +18,20 @@ import java.util.UUID;
 
 public class eco implements CommandExecutor {
 
-    private Map<UUID, MoneyObject> moneyMap;
+    private final Map<UUID, UserWallet> userWalletMap;
 
-    private World16Economy plugin;
+    private final World16Economy plugin;
 
-    //Managers
-    private DataManager dataManager;
+    private final UserWalletManager userWalletManager;
 
-    private VaultCore vaultCore;
-    private API api;
+    private final VaultCore vaultCore;
+    private final API api;
 
     public eco(World16Economy plugin) {
         this.plugin = plugin;
-        this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
+        this.userWalletMap = this.plugin.getUserWalletManager().getUserWalletMap();
         this.api = this.plugin.getApi();
-        this.dataManager = this.plugin.getDataManager();
+        this.userWalletManager = this.plugin.getUserWalletManager();
         this.vaultCore = this.plugin.getVaultManager().getVaultCore();
 
         this.plugin.getCommand("eco").setExecutor(this);
@@ -40,11 +39,10 @@ public class eco implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.eco")) {
             player.sendMessage(Translate.color("&cYou do not have permission to use this command."));
@@ -78,7 +76,7 @@ public class eco implements CommandExecutor {
             }
 
             vaultCore.depositPlayer(target.getUniqueId().toString(), (double) amount);
-            player.sendMessage(Translate.color("&a$" + amount + " has been added to " + target.getDisplayName() + " account. &9New Balance: &a$" + moneyMap.get(target.getUniqueId()).getBalance()));
+            player.sendMessage(Translate.color("&a$" + amount + " has been added to " + target.getDisplayName() + " account. &9New Balance: &a$" + userWalletMap.get(target.getUniqueId()).getBalance()));
             return true;
         } else if (args.length == 3 && args[0].equalsIgnoreCase("take")) {
             if (!player.hasPermission("world16.eco.take")) {
@@ -101,7 +99,7 @@ public class eco implements CommandExecutor {
             }
 
             if (vaultCore.withdrawPlayer(target.getUniqueId().toString(), amount).type == EconomyResponse.ResponseType.SUCCESS) {
-                player.sendMessage(Translate.color("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + moneyMap.get(target.getUniqueId()).getBalance()));
+                player.sendMessage(Translate.color("&e$" + amount + " &ahas been taken from " + target.getDisplayName() + " account. &9New balance: &e$" + userWalletMap.get(target.getUniqueId()).getBalance()));
                 return true;
             }
             return true;
@@ -125,7 +123,7 @@ public class eco implements CommandExecutor {
                 return true;
             }
 
-            moneyMap.get(target.getUniqueId()).setBalance(amount);
+            userWalletMap.get(target.getUniqueId()).setBalance(amount);
             target.sendMessage(Translate.color("&aYour balance was set to $" + amount));
             player.sendMessage(Translate.color("&aYou set " + target.getDisplayName() + "'s balance to $" + amount));
             return true;
@@ -138,7 +136,7 @@ public class eco implements CommandExecutor {
 
             if (!targetChecker(player, target)) return true;
 
-            moneyMap.get(target.getUniqueId()).setBalance(api.getDefaultMoney());
+            userWalletMap.get(target.getUniqueId()).setBalance(api.getDefaultMoney());
             target.sendMessage(Translate.color("&aYour balance was set to $" + api.getDefaultMoney()));
             player.sendMessage(Translate.color("&aYou set " + target.getDisplayName() + "'s balance to $" + api.getDefaultMoney()));
             return true;
@@ -155,7 +153,7 @@ public class eco implements CommandExecutor {
             player.sendMessage(Translate.color("7cLooks like the player isn't online."));
             return false;
         }
-        if (!dataManager.isUserMap(targetPlayer.getUniqueId())) {
+        if (!userWalletManager.isUserMap(targetPlayer.getUniqueId())) {
             throw new NullPointerException("User isn't in memory?");
         }
         return true;

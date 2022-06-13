@@ -1,7 +1,7 @@
 package com.andrew121410.mc.world16economy;
 
-import com.andrew121410.mc.world16economy.managers.DataManager;
-import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.managers.UserWalletManager;
+import com.andrew121410.mc.world16economy.objects.UserWallet;
 import com.andrew121410.mc.world16economy.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import net.milkbowl.vault.economy.Economy;
@@ -14,22 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+// http://milkbowl.github.io/VaultAPI/
 public class VaultCore implements Economy {
 
-    //So i can remember.
-    //http://milkbowl.github.io/VaultAPI/
+    private final Map<UUID, UserWallet> moneyMap;
 
-    private Map<UUID, MoneyObject> moneyMap;
-
-    private World16Economy plugin;
-    private DataManager dataManager;
-    private API api;
+    private final World16Economy plugin;
+    private final UserWalletManager userWalletManager;
+    private final API api;
 
     public VaultCore(World16Economy plugin) {
         this.plugin = plugin;
         this.api = this.plugin.getApi();
-        this.dataManager = this.plugin.getDataManager();
-        this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
+        this.userWalletManager = this.plugin.getUserWalletManager();
+        this.moneyMap = this.plugin.getUserWalletManager().getUserWalletMap();
     }
 
     @Override
@@ -59,22 +57,22 @@ public class VaultCore implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return null;
+        return "Dollars";
     }
 
     @Override
     public String currencyNameSingular() {
-        return null;
+        return "Dollar";
     }
 
     @Override
     public boolean hasAccount(String uuid) {
-        return dataManager.isUser(UUID.fromString(uuid));
+        return userWalletManager.isUser(UUID.fromString(uuid));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return dataManager.isUserConfig(offlinePlayer.getUniqueId());
+        return userWalletManager.isUserConfig(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -94,8 +92,8 @@ public class VaultCore implements Economy {
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
-        return moneyObject != null ? moneyObject.getBalanceExact() : 0;
+        UserWallet userWallet = this.moneyMap.get(offlinePlayer.getUniqueId());
+        return userWallet != null ? userWallet.getBalanceExact() : 0;
     }
 
     @Override
@@ -114,7 +112,7 @@ public class VaultCore implements Economy {
         Player target = Bukkit.getPlayer(realUUID);
 
         if (target != null) {
-            if (dataManager.isUser(UUID.fromString(uuid))) {
+            if (userWalletManager.isUser(UUID.fromString(uuid))) {
                 return moneyMap.get(realUUID).hasEnough((long) amount);
             }
         }
@@ -123,9 +121,9 @@ public class VaultCore implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
-            MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
-            return moneyObject.hasEnough((long) amount);
+        if (userWalletManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            UserWallet userWallet = this.moneyMap.get(offlinePlayer.getUniqueId());
+            return userWallet.hasEnough((long) amount);
         }
         return false;
     }
@@ -144,7 +142,7 @@ public class VaultCore implements Economy {
     public EconomyResponse withdrawPlayer(String uuid, double amount) {
         Player player = Bukkit.getPlayer(UUID.fromString(uuid));
         if (player != null) {
-            if (dataManager.isUser(UUID.fromString(uuid))) {
+            if (userWalletManager.isUser(UUID.fromString(uuid))) {
                 if (this.moneyMap.get(UUID.fromString(uuid)).hasEnough((long) amount)) {
                     this.moneyMap.get(UUID.fromString(uuid)).subtractBalance((long) amount);
                     player.sendMessage(Translate.color("&e$" + (long) amount + " &ahas been taken from your account."));
@@ -163,14 +161,14 @@ public class VaultCore implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
-            MoneyObject moneyObject = this.moneyMap.get(offlinePlayer.getUniqueId());
-            if (moneyObject.hasEnough((long) amount)) {
-                moneyObject.subtractBalance((long) amount);
-                dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
-                return new EconomyResponse(amount, moneyObject.getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+        if (userWalletManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            UserWallet userWallet = this.moneyMap.get(offlinePlayer.getUniqueId());
+            if (userWallet.hasEnough((long) amount)) {
+                userWallet.subtractBalance((long) amount);
+                userWalletManager.saveToYML(offlinePlayer.getUniqueId(), userWallet);
+                return new EconomyResponse(amount, userWallet.getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
             } else {
-                return new EconomyResponse(amount, moneyObject.getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+                return new EconomyResponse(amount, userWallet.getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
             }
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "You do not have an account!");
@@ -191,7 +189,7 @@ public class VaultCore implements Economy {
         Player player = Bukkit.getPlayer(UUID.fromString(uuid));
 
         if (player != null) {
-            if (dataManager.isUser(UUID.fromString(uuid))) {
+            if (userWalletManager.isUser(UUID.fromString(uuid))) {
                 moneyMap.get(UUID.fromString(uuid)).addBalance((long) amount);
                 player.sendMessage(Translate.color("&a$" + (long) amount + " has been added to your account."));
                 return new EconomyResponse(amount, moneyMap.get(UUID.fromString(uuid)).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
@@ -205,10 +203,10 @@ public class VaultCore implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
-        if (dataManager.isUserConfig(offlinePlayer.getUniqueId())) {
-            MoneyObject moneyObject = this.dataManager.get(offlinePlayer.getUniqueId());
-            moneyObject.addBalance((long) amount);
-            this.dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
+        if (userWalletManager.isUserConfig(offlinePlayer.getUniqueId())) {
+            UserWallet userWallet = this.userWalletManager.getFromYML(offlinePlayer.getUniqueId());
+            userWallet.addBalance((long) amount);
+            this.userWalletManager.saveToYML(offlinePlayer.getUniqueId(), userWallet);
             return new EconomyResponse(amount, moneyMap.get(offlinePlayer.getUniqueId()).getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You have been paid $" + amount);
         }
         return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.FAILURE, "Player does not have an account!");
@@ -287,7 +285,7 @@ public class VaultCore implements Economy {
     @Override
     public boolean createPlayerAccount(String uuid) {
         if (!hasAccount(uuid)) {
-            dataManager.get(UUID.fromString(uuid));
+            userWalletManager.getFromYML(UUID.fromString(uuid));
             return true;
         }
         return false;
@@ -296,8 +294,8 @@ public class VaultCore implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
         if (!hasAccount(offlinePlayer)) {
-            MoneyObject moneyObject = new MoneyObject(offlinePlayer.getUniqueId(), this.api.getDefaultMoney());
-            this.dataManager.save(offlinePlayer.getUniqueId(), moneyObject);
+            UserWallet userWallet = new UserWallet(offlinePlayer.getUniqueId(), this.api.getDefaultMoney());
+            this.userWalletManager.saveToYML(offlinePlayer.getUniqueId(), userWallet);
             return true;
         }
         return false;

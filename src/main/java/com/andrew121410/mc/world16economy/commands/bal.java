@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.VaultCore;
 import com.andrew121410.mc.world16economy.World16Economy;
-import com.andrew121410.mc.world16economy.managers.DataManager;
-import com.andrew121410.mc.world16economy.objects.MoneyObject;
+import com.andrew121410.mc.world16economy.managers.UserWalletManager;
+import com.andrew121410.mc.world16economy.objects.UserWallet;
 import com.andrew121410.mc.world16economy.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
@@ -16,21 +16,20 @@ import java.util.UUID;
 
 public class bal implements CommandExecutor {
 
-    private Map<UUID, MoneyObject> moneyMap;
+    private final Map<UUID, UserWallet> userWalletMap;
 
-    private World16Economy plugin;
-    private API api;
+    private final World16Economy plugin;
+    private final API api;
 
-    //Managers
-    private DataManager dataManager;
+    private final UserWalletManager userWalletManager;
 
-    private VaultCore vaultCore;
+    private final VaultCore vaultCore;
 
     public bal(World16Economy plugin) {
         this.plugin = plugin;
-        this.moneyMap = this.plugin.getSetListMap().getMoneyMap();
+        this.userWalletMap = this.plugin.getUserWalletManager().getUserWalletMap();
         this.api = this.plugin.getApi();
-        this.dataManager = this.plugin.getDataManager();
+        this.userWalletManager = this.plugin.getUserWalletManager();
         this.vaultCore = this.plugin.getVaultManager().getVaultCore();
 
         this.plugin.getCommand("bal").setExecutor(this);
@@ -38,11 +37,10 @@ public class bal implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only Players Can Use This Command.");
             return true;
         }
-        Player player = (Player) sender;
 
         if (!player.hasPermission("world16.bal")) {
             player.sendMessage(Translate.color("&cYou do not have permission to use this command."));
@@ -50,8 +48,8 @@ public class bal implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            if (this.moneyMap.containsKey(player.getUniqueId())) {
-                player.sendMessage(Translate.color("&aBalance:&c " + moneyMap.get(player.getUniqueId()).getBalanceFancy()));
+            if (this.userWalletMap.containsKey(player.getUniqueId())) {
+                player.sendMessage(Translate.color("&aBalance:&c " + userWalletMap.get(player.getUniqueId()).getBalanceFancy()));
             } else {
                 vaultCore.hasAccount(player.getUniqueId().toString());
             }
@@ -65,7 +63,7 @@ public class bal implements CommandExecutor {
 
             if (!targetChecker(player, target)) return true;
 
-            player.sendMessage(Translate.color("&aBalance of " + target.getDisplayName() + " is " + moneyMap.get(target.getUniqueId()).getBalanceFancy()));
+            player.sendMessage(Translate.color("&aBalance of " + target.getDisplayName() + " is " + userWalletMap.get(target.getUniqueId()).getBalanceFancy()));
         }
         return true;
     }
@@ -79,7 +77,7 @@ public class bal implements CommandExecutor {
             player.sendMessage(Translate.color("7cLooks like the player isn't online."));
             return false;
         }
-        if (!dataManager.isUserMap(targetPlayer.getUniqueId())) {
+        if (!userWalletManager.isUserMap(targetPlayer.getUniqueId())) {
             throw new NullPointerException("User isn't in memory?");
         }
         return true;

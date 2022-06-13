@@ -9,8 +9,8 @@ import org.bukkit.plugin.ServicePriority;
 
 public class VaultManager {
 
-    private VaultCore vaultCore;
-    private World16Economy plugin;
+    private final VaultCore vaultCore;
+    private final World16Economy plugin;
 
     public VaultManager(World16Economy plugin) {
         this.plugin = plugin;

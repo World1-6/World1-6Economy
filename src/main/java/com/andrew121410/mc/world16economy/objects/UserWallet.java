@@ -9,19 +9,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SerializableAs("MoneyObject")
-public class MoneyObject implements ConfigurationSerializable {
+@SerializableAs("UserWallet")
+public class UserWallet implements ConfigurationSerializable {
 
     private UUID uuid;
     private long balance;
 
-    public MoneyObject(UUID uuid, long balance) {
+    public UserWallet(UUID uuid, long balance) {
         this.uuid = uuid;
         this.balance = balance;
     }
 
+    public static UserWallet deserialize(Map<String, Object> map) {
+        return new UserWallet(UUID.fromString((String) map.get("UUID")), ((Number) map.get("Balance")).longValue());
+    }
+
     public UUID getUuid() {
         return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public double getBalanceExact() {
@@ -32,20 +40,16 @@ public class MoneyObject implements ConfigurationSerializable {
         return balance;
     }
 
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+
     public String getBalanceFancy() {
         return "$" + balance;
     }
 
     public Player getPlayer() {
         return Bukkit.getPlayer(this.uuid);
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setBalance(long balance) {
-        this.balance = balance;
     }
 
     public void addBalance(long number) {
@@ -70,9 +74,5 @@ public class MoneyObject implements ConfigurationSerializable {
         map.put("UUID", uuid.toString());
         map.put("Balance", this.balance);
         return map;
-    }
-
-    public static MoneyObject deserialize(Map<String, Object> map) {
-        return new MoneyObject(UUID.fromString((String) map.get("UUID")), ((Number) map.get("Balance")).longValue());
     }
 }
