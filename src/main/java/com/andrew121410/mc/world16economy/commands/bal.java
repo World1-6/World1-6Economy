@@ -77,7 +77,7 @@ public class bal implements CommandExecutor {
             player.sendMessage(Translate.color("7cLooks like the player isn't online."));
             return false;
         }
-        if (!userWalletManager.isUserMap(targetPlayer.getUniqueId())) {
+        if (!userWalletManager.isInMemory(targetPlayer.getUniqueId())) {
             throw new NullPointerException("User isn't in memory?");
         }
         return true;

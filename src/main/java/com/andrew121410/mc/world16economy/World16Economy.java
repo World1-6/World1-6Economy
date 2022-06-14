@@ -2,8 +2,8 @@ package com.andrew121410.mc.world16economy;
 
 import com.andrew121410.mc.world16economy.commands.bal;
 import com.andrew121410.mc.world16economy.commands.eco;
-import com.andrew121410.mc.world16economy.events.OnPlayerJoinEvent;
-import com.andrew121410.mc.world16economy.events.OnPlayerQuitEvent;
+import com.andrew121410.mc.world16economy.listeners.OnPlayerJoinEvent;
+import com.andrew121410.mc.world16economy.listeners.OnPlayerQuitEvent;
 import com.andrew121410.mc.world16economy.managers.UserWalletManager;
 import com.andrew121410.mc.world16economy.managers.VaultManager;
 import com.andrew121410.mc.world16economy.objects.UserWallet;

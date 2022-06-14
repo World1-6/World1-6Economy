@@ -34,8 +34,12 @@ public class UserWalletManager {
     }
 
     public UserWallet load(Player player) {
-        UserWallet userWallet = getFromYML(player.getUniqueId());
-        this.userWalletMap.putIfAbsent(player.getUniqueId(), userWallet);
+        return this.load(player.getUniqueId());
+    }
+
+    public UserWallet load(UUID uuid) {
+        UserWallet userWallet = getFromYML(uuid, true);
+        this.userWalletMap.putIfAbsent(uuid, userWallet);
         return userWallet;
     }
 
@@ -44,17 +48,22 @@ public class UserWalletManager {
         this.userWalletMap.remove(player.getUniqueId());
     }
 
-    public UserWallet getFromYML(UUID uuid) {
+    public UserWallet getFromYML(UUID uuid, boolean createIfNotExist) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-        // Create new UserWallet if it doesn't exist
-        if (cs == null) {
+        if (createIfNotExist && cs == null) {
             this.plugin.getServer().getConsoleSender().sendMessage(Translate.color(API.USELESS_TAG + " " + "New User: " + uuid));
-            cs = this.userConfig.getConfig().createSection(uuid.toString());
-            UserWallet userObject = new UserWallet(uuid, this.api.getDefaultMoney());
-            cs.set("UserWallet", userObject);
-            return userObject;
+            UserWallet userWallet = new UserWallet(uuid, api.getDefaultMoney());
+            saveToYML(uuid, userWallet);
+            return userWallet;
         }
-        return (UserWallet) cs.get("UserWallet");
+
+        UserWallet userWallet;
+        try {
+            userWallet = (UserWallet) cs.get("UserWallet");
+        } catch (Exception e) {
+            userWallet = null;
+        }
+        return userWallet;
     }
 
     public void saveToYML(UUID uuid, UserWallet userWallet) {
@@ -65,15 +74,15 @@ public class UserWalletManager {
     }
 
     public boolean isUser(UUID uuid) {
-        return isUserConfig(uuid) && isUserMap(uuid);
+        return isInMemory(uuid) || hasAnAccount(uuid);
     }
 
-    public boolean isUserConfig(UUID uuid) {
+    public boolean hasAnAccount(UUID uuid) {
         ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
         return cs != null;
     }
 
-    public boolean isUserMap(UUID uuid) {
+    public boolean isInMemory(UUID uuid) {
         return this.userWalletMap.containsKey(uuid);
     }
 

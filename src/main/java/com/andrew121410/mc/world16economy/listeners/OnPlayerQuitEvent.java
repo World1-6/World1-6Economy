@@ -1,4 +1,4 @@
-package com.andrew121410.mc.world16economy.events;
+package com.andrew121410.mc.world16economy.listeners;
 
 import com.andrew121410.mc.world16economy.World16Economy;
 import org.bukkit.entity.Player;
