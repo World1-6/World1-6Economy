@@ -119,11 +119,10 @@ public class VaultCore implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double amount) {
-        if (userWalletManager.hasAnAccount(offlinePlayer.getUniqueId())) {
-            UserWallet userWallet = this.userWalletManager.getFromYML(offlinePlayer.getUniqueId(), false);
-            return userWallet.hasEnough((long) amount);
-        }
-        return false;
+        UserWallet userWallet = this.userWalletManager.getFromYML(offlinePlayer.getUniqueId(), false);
+        if (userWallet == null) return false;
+
+        return userWallet.hasEnough((long) amount);
     }
 
     @Override

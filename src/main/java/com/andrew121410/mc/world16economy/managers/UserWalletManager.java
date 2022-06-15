@@ -74,12 +74,7 @@ public class UserWalletManager {
     }
 
     public boolean isUser(UUID uuid) {
-        return isInMemory(uuid) || hasAnAccount(uuid);
-    }
-
-    public boolean hasAnAccount(UUID uuid) {
-        ConfigurationSection cs = this.userConfig.getConfig().getConfigurationSection(uuid.toString());
-        return cs != null;
+        return isInMemory(uuid) || getFromYML(uuid, false) != null;
     }
 
     public boolean isInMemory(UUID uuid) {
