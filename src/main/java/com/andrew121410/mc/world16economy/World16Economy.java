@@ -8,6 +8,7 @@ import com.andrew121410.mc.world16economy.managers.UserWalletManager;
 import com.andrew121410.mc.world16economy.managers.VaultManager;
 import com.andrew121410.mc.world16economy.objects.UserWallet;
 import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16utils.updater.UpdateManager;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,6 +37,8 @@ public class World16Economy extends JavaPlugin {
         registerManagers();
         registerListeners();
         registerCommands();
+
+        UpdateManager.registerUpdater(this, new com.andrew121410.mc.world16economy.Updater(this));
     }
 
     public void onDisable() {
