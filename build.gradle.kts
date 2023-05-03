@@ -10,8 +10,16 @@ description = "world1-6economy"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 tasks {
+    build {
+        dependsOn("shadowJar")
+    }
+
     compileJava {
         options.encoding = "UTF-8"
+    }
+
+    jar {
+        enabled = false
     }
 
     shadowJar {
