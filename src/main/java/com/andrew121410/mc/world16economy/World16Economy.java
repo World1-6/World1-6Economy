@@ -4,26 +4,19 @@ import com.andrew121410.mc.world16economy.commands.bal;
 import com.andrew121410.mc.world16economy.commands.eco;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerJoinEvent;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerQuitEvent;
-import com.andrew121410.mc.world16economy.managers.UserWalletManager;
+import com.andrew121410.mc.world16economy.managers.CurrenciesManager;
 import com.andrew121410.mc.world16economy.managers.VaultManager;
-import com.andrew121410.mc.world16economy.objects.UserWallet;
-import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.managers.WalletManager;
 import com.andrew121410.mc.world16utils.updater.UpdateManager;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class World16Economy extends JavaPlugin {
 
     private static World16Economy plugin;
 
-    static {
-        ConfigurationSerialization.registerClass(UserWallet.class, "UserWallet");
-    }
-
-    private API api;
-
     private VaultManager vaultManager;
-    private UserWalletManager userWalletManager;
+    private CurrenciesManager currenciesManager;
+    private WalletManager walletManager;
 
     public static World16Economy getPlugin() {
         return plugin;
@@ -31,9 +24,7 @@ public class World16Economy extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
-        this.api = new API(this);
 
-        registerDefaultConfig();
         registerManagers();
         registerListeners();
         registerCommands();
@@ -55,28 +46,20 @@ public class World16Economy extends JavaPlugin {
     }
 
     private void registerManagers() {
-        this.userWalletManager = new UserWalletManager(this);
+        this.currenciesManager = new CurrenciesManager(this);
+        this.walletManager = new WalletManager(this);
         this.vaultManager = new VaultManager(this);
-    }
-
-    private void registerDefaultConfig() {
-        this.getConfig().addDefault("defaultMoney", api.getDefaultMoney());
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-        this.reloadConfig();
-
-        this.api.setDefaultMoney(this.getConfig().getLong("defaultMoney"));
     }
 
     public VaultManager getVaultManager() {
         return vaultManager;
     }
 
-    public UserWalletManager getUserWalletManager() {
-        return userWalletManager;
+    public CurrenciesManager getCurrenciesManager() {
+        return currenciesManager;
     }
 
-    public API getApi() {
-        return api;
+    public WalletManager getWalletManager() {
+        return walletManager;
     }
 }

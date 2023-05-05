@@ -2,8 +2,6 @@ package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.VaultCore;
 import com.andrew121410.mc.world16economy.World16Economy;
-import com.andrew121410.mc.world16economy.managers.UserWalletManager;
-import com.andrew121410.mc.world16economy.objects.UserWallet;
 import com.andrew121410.mc.world16economy.utils.API;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.utils.Utils;
