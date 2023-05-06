@@ -19,12 +19,16 @@ public class CurrenciesManager {
         this.currenciesByUUID = new HashMap<>();
     }
 
-    public void loadAll() {
-        //TODO
-    }
 
-    public void saveAll() {
-        //TODO
+    // Used in serializer
+    public CurrenciesManager(Map<UUID, Currency> currenciesByUUID) {
+        this.currenciesByUUID = currenciesByUUID;
+
+        // Populate the currenciesByName map
+        this.currenciesByName = new HashMap<>();
+        for (Currency currency : currenciesByUUID.values()) {
+            this.currenciesByName.put(currency.getName(), currency);
+        }
     }
 
     public void addCurrency(Currency currency) {
@@ -59,5 +63,9 @@ public class CurrenciesManager {
 
     public void setDefaultCurrency(Currency defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
+    }
+
+    public Map<UUID, Currency> getCurrenciesByUUID() {
+        return currenciesByUUID;
     }
 }

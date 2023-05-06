@@ -16,7 +16,7 @@ public class Currency {
     private String currencyNameSingular;
     private String currencyNamePlural;
 
-    private long defaultMoney;
+    private double defaultMoney;
 
     public Currency(String name, String symbol, String currencyNameSingular, String currencyNamePlural, long defaultMoney) {
         this.uuid = UUID.randomUUID();
@@ -28,6 +28,17 @@ public class Currency {
         this.defaultMoney = defaultMoney;
 
         this.mobDropManager = new MobDropManager();
+    }
+
+    public Currency(String name, UUID uuid, boolean defaultCurrency, MobDropManager mobDropManager, String symbol, String currencyNameSingular, String currencyNamePlural, Double defaultMoney) {
+        this.name = name;
+        this.uuid = uuid;
+        this.defaultCurrency = defaultCurrency;
+        this.mobDropManager = mobDropManager;
+        this.symbol = symbol;
+        this.currencyNameSingular = currencyNameSingular;
+        this.currencyNamePlural = currencyNamePlural;
+        this.defaultMoney = defaultMoney;
     }
 
     public UUID getUuid() {
@@ -74,11 +85,15 @@ public class Currency {
         this.currencyNamePlural = currencyNamePlural;
     }
 
-    public long getDefaultMoney() {
+    public double getDefaultMoney() {
         return defaultMoney;
     }
 
     public void setDefaultMoney(long defaultMoney) {
         this.defaultMoney = defaultMoney;
+    }
+
+    public MobDropManager getMobDropManager() {
+        return mobDropManager;
     }
 }

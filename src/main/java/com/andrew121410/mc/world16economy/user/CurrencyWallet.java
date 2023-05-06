@@ -7,7 +7,7 @@ public class CurrencyWallet {
     private UUID currencyUUID;
     private double amount;
 
-    public CurrencyWallet(UUID currencyUUID, long amount) {
+    public CurrencyWallet(UUID currencyUUID, double amount) {
         this.currencyUUID = currencyUUID;
         this.amount = amount;
     }

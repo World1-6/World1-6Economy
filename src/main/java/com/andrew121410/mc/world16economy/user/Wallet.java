@@ -13,6 +13,12 @@ public class Wallet {
         this.uuid = owner;
     }
 
+    // Used in serialization.
+    public Wallet(UUID uuid, Map<UUID, CurrencyWallet> currencyWallets) {
+        this.uuid = uuid;
+        this.currencyWallets = currencyWallets;
+    }
+
     public UUID getUuid() {
         return uuid;
     }
