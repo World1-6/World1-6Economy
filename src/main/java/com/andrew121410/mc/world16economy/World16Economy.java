@@ -5,7 +5,6 @@ import com.andrew121410.mc.world16economy.commands.eco;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerJoinEvent;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerQuitEvent;
 import com.andrew121410.mc.world16economy.managers.CurrenciesManager;
-import com.andrew121410.mc.world16economy.managers.VaultManager;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
 import com.andrew121410.mc.world16utils.updater.UpdateManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +13,6 @@ public class World16Economy extends JavaPlugin {
 
     private static World16Economy plugin;
 
-    private VaultManager vaultManager;
     private CurrenciesManager currenciesManager;
     private WalletManager walletManager;
 
@@ -48,12 +46,11 @@ public class World16Economy extends JavaPlugin {
     private void registerManagers() {
         this.currenciesManager = new CurrenciesManager(this);
         this.walletManager = new WalletManager(this);
-        this.vaultManager = new VaultManager(this);
+
+        // Last is Vault
+        new VaultCore(this);
     }
 
-    public VaultManager getVaultManager() {
-        return vaultManager;
-    }
 
     public CurrenciesManager getCurrenciesManager() {
         return currenciesManager;

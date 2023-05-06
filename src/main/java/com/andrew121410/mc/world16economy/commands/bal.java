@@ -1,33 +1,23 @@
 package com.andrew121410.mc.world16economy.commands;
 
-import com.andrew121410.mc.world16economy.VaultCore;
 import com.andrew121410.mc.world16economy.World16Economy;
+import com.andrew121410.mc.world16economy.managers.WalletManager;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.UUID;
-
 public class bal implements CommandExecutor {
 
-    private final Map<UUID, UserWallet> userWalletMap;
-
     private final World16Economy plugin;
-    private final API api;
 
-    private final UserWalletManager userWalletManager;
-
-    private final VaultCore vaultCore;
+    private WalletManager walletManager;
 
     public bal(World16Economy plugin) {
         this.plugin = plugin;
-        this.userWalletMap = this.plugin.getUserWalletManager().getUserWalletMap();
-        this.api = this.plugin.getApi();
-        this.userWalletManager = this.plugin.getUserWalletManager();
-        this.vaultCore = this.plugin.getVaultManager().getVaultCore();
+
+        this.walletManager = this.plugin.getWalletManager();
 
         this.plugin.getCommand("bal").setExecutor(this);
     }

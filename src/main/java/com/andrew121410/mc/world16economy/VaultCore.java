@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicePriority;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,18 @@ public class VaultCore implements Economy {
         this.walletManager = this.plugin.getWalletManager();
 
         this.userWalletMap = this.walletManager.getWallets();
+
+        setupEconomy();
+    }
+
+    private void setupEconomy() {
+        if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+            this.plugin.getLogger().log(java.util.logging.Level.SEVERE, "Vault was not found. Disabling plugin.");
+            this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
+            return;
+        }
+        this.plugin.getServer().getServicesManager().register(Economy.class, this, this.plugin, ServicePriority.Low);
+        this.plugin.getLogger().log(java.util.logging.Level.INFO, Translate.color("&6Vault hooked."));
     }
 
     private CurrencyWallet getCurrencyWallet(UUID playerUUID) {
