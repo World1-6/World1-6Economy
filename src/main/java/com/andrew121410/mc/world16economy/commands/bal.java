@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.World16Economy;
+import com.andrew121410.mc.world16economy.currency.Currency;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
 import com.andrew121410.mc.world16economy.user.CurrencyWallet;
 import com.andrew121410.mc.world16economy.user.Wallet;
@@ -9,7 +10,9 @@ import com.andrew121410.mc.world16utils.gui.MiddleGUIWindow;
 import com.andrew121410.mc.world16utils.gui.buttons.AbstractGUIButton;
 import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
 import com.andrew121410.mc.world16utils.utils.InventoryUtils;
-import org.bukkit.Material;
+import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,38 +59,42 @@ public class bal implements CommandExecutor {
         return true;
     }
 
-    private void showAllCurrenciesGUI(Player player) {
-        Wallet wallet = this.walletManager.getWallets().get(player.getUniqueId());
+    private void showAllCurrenciesGUI(OfflinePlayer target, Player player) {
+        Wallet wallet = this.walletManager.getWallets().get(target.getUniqueId());
 
         MiddleGUIWindow guiWindow = new MiddleGUIWindow() {
             @Override
             public void onCreate(Player player) {
                 List<AbstractGUIButton> buttons = new ArrayList<>();
 
-                int slot = 0;
+                int slot = 0; // Doesn't matter
                 for (Map.Entry<UUID, CurrencyWallet> uuidCurrencyWalletEntry : wallet.getCurrencyWallets().entrySet()) {
                     UUID uuid = uuidCurrencyWalletEntry.getKey();
                     CurrencyWallet currencyWallet = uuidCurrencyWalletEntry.getValue();
 
-                    ItemStack itemStack = InventoryUtils.createItem(Material.DIAMOND, 1, currencyWallet.getCurrencyUUID().toString(), String.valueOf(currencyWallet.getAmount()));
+                    Currency currency = plugin.getCurrenciesManager().getCurrencyByUUID(uuid);
+
+                    ItemStack itemStack = InventoryUtils.createItem(currency.getItemMaterial(), 1, currency.getName(), String.valueOf(currencyWallet.getAmount()));
 
                     ClickEventButton button = new ClickEventButton(slot, itemStack, (event) -> {
                     });
 
-                    slot += 1;
+                    slot += 1; // Doesn't matter
 
                     buttons.add(button);
                 }
 
-                this.update(buttons, "Testing", null);
+                Component title = target.getUniqueId() == player.getUniqueId() ? Translate.miniMessage("<gold>Your wallet!") : Translate.miniMessage("<gold>" + target.getName() + "'s wallet!");
+
+                this.update(buttons, title, null);
             }
 
             @Override
             public void onClose(InventoryCloseEvent event) {
-
             }
         };
 
         guiWindow.open(player);
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE, 1.0f, 1.0f);
     }
 }

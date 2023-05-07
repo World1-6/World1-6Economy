@@ -102,4 +102,12 @@ public class Currency {
     public MobDropManager getMobDropManager() {
         return mobDropManager;
     }
+
+    public Material getItemMaterial() {
+        return itemMaterial;
+    }
+
+    public void setItemMaterial(Material itemMaterial) {
+        this.itemMaterial = itemMaterial;
+    }
 }
