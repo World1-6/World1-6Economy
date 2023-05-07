@@ -31,6 +31,6 @@ public class CurrencyWalletSerializer implements TypeSerializer<CurrencyWallet> 
         }
 
         node.node("currencyUUID").set(obj.getCurrencyUUID());
-        node.node("amount").set(obj.getAmount());
+        node.node("amount").set(obj.getBalanceExact());
     }
 }

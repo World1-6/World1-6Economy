@@ -90,7 +90,7 @@ public class StorageManager {
         saveDefaultCurrencyUUID();
     }
 
-    public Wallet loadWallet(String userUuid, boolean addToCache, boolean createIfNotExist) {
+    public Wallet loadWallet(UUID userUuid, boolean addToCache, boolean createIfNotExist) {
         try {
             CommentedConfigurationNode node = this.walletsYml.load().node("Wallets");
 
@@ -101,13 +101,13 @@ public class StorageManager {
 
             // If the wallet is virtual, and we want to create it.
             if (node.node(userUuid).virtual() && createIfNotExist) {
-                return this.walletManager.newUser(UUID.fromString(userUuid), true);
+                return this.walletManager.newUser(userUuid, true);
             }
 
             Wallet wallet = node.node(userUuid).get(Wallet.class);
 
             if (addToCache) {
-                this.walletManager.getWallets().put(UUID.fromString(userUuid), wallet);
+                this.walletManager.getWallets().put(userUuid, wallet);
             }
 
             return wallet;

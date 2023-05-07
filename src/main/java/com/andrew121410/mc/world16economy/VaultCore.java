@@ -122,7 +122,7 @@ public class VaultCore implements Economy {
 
         if (currencyWallet == null) return 0.0;
 
-        return currencyWallet.getAmount();
+        return currencyWallet.getBalanceExact();
     }
 
     @Override
@@ -180,12 +180,12 @@ public class VaultCore implements Economy {
                 player.sendMessage(Translate.miniMessage("<gold>You paid <green>" + symbol + amount + "<gold>."));
             }
 
-            return new EconomyResponse(amount, currencyWallet.getAmount(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
+            return new EconomyResponse(amount, currencyWallet.getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You paid $" + amount);
         } else {
             if (player != null) {
                 player.sendMessage(Translate.miniMessage("<red>You do not have enough money!"));
             }
-            return new EconomyResponse(amount, currencyWallet.getAmount(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
+            return new EconomyResponse(amount, currencyWallet.getBalanceExact(), EconomyResponse.ResponseType.FAILURE, "You do not have enough money!");
         }
     }
 
@@ -220,7 +220,7 @@ public class VaultCore implements Economy {
             player.sendMessage(Translate.miniMessage("<gold>You received <green>" + symbol + amount + "<gold>."));
         }
 
-        return new EconomyResponse(amount, currencyWallet.getAmount(), EconomyResponse.ResponseType.SUCCESS, "You received $" + amount);
+        return new EconomyResponse(amount, currencyWallet.getBalanceExact(), EconomyResponse.ResponseType.SUCCESS, "You received $" + amount);
     }
 
     @Override
