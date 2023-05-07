@@ -63,7 +63,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:a018bd5be3")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:2e27256f5d")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 }
 

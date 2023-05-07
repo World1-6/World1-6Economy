@@ -6,6 +6,7 @@ import com.andrew121410.mc.world16utils.config.serializers.SerializerUtils;
 import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.ConfigurationNode;
 import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.serialize.SerializationException;
 import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.serialize.TypeSerializer;
+import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Type;
@@ -23,19 +24,11 @@ public class CurrencySerializer implements TypeSerializer<Currency> {
         String currencyNameSingular = SerializerUtils.nonVirtualNode(node, "currencyNameSingular").getString();
         String currencyNamePlural = SerializerUtils.nonVirtualNode(node, "currencyNamePlural").getString();
         Double defaultMoney = SerializerUtils.nonVirtualNode(node, "defaultMoney").getDouble();
+        Material itemMaterial = SerializerUtils.nonVirtualNode(node, "itemMaterial").get(Material.class);
 
         MobDropManager mobDropManager = SerializerUtils.nonVirtualNode(node, "mobDropManager").get(MobDropManager.class);
 
-        return new Currency(
-                name,
-                uuid,
-                defaultCurrency,
-                mobDropManager,
-                symbol,
-                currencyNameSingular,
-                currencyNamePlural,
-                defaultMoney
-        );
+        return new Currency(name, uuid, defaultCurrency, mobDropManager, symbol, currencyNameSingular, currencyNamePlural, itemMaterial, defaultMoney);
     }
 
     @Override

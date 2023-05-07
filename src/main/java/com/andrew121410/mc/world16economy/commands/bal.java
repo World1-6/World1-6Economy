@@ -2,11 +2,25 @@ package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
+import com.andrew121410.mc.world16economy.user.CurrencyWallet;
+import com.andrew121410.mc.world16economy.user.Wallet;
 import com.andrew121410.mc.world16utils.chat.Translate;
+import com.andrew121410.mc.world16utils.gui.MiddleGUIWindow;
+import com.andrew121410.mc.world16utils.gui.buttons.AbstractGUIButton;
+import com.andrew121410.mc.world16utils.gui.buttons.defaults.ClickEventButton;
+import com.andrew121410.mc.world16utils.utils.InventoryUtils;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class bal implements CommandExecutor {
 
@@ -35,38 +49,45 @@ public class bal implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            if (this.userWalletMap.containsKey(player.getUniqueId())) {
-                player.sendMessage(Translate.color("&aBalance:&c " + userWalletMap.get(player.getUniqueId()).getBalanceFancy()));
-            } else {
-                vaultCore.hasAccount(player.getUniqueId().toString());
-            }
+            showAllCurrenciesGUI(player);
             return true;
-        } else if (args.length == 1) {
-            if (!player.hasPermission("world16.bal.other")) {
-                player.sendMessage(Translate.color("&cYou do not have permission to use this command."));
-                return true;
-            }
-            Player target = this.plugin.getServer().getPlayer(args[0]);
-
-            if (!targetChecker(player, target)) return true;
-
-            player.sendMessage(Translate.color("&aBalance of " + target.getDisplayName() + " is " + userWalletMap.get(target.getUniqueId()).getBalanceFancy()));
         }
+
         return true;
     }
 
-    private Boolean targetChecker(Player player, Player targetPlayer) {
-        if (targetPlayer == null) {
-            player.sendMessage(Translate.color("&cThat isn't a valid player."));
-            return false;
-        }
-        if (!targetPlayer.isOnline()) {
-            player.sendMessage(Translate.color("7cLooks like the player isn't online."));
-            return false;
-        }
-        if (!userWalletManager.isInMemory(targetPlayer.getUniqueId())) {
-            throw new NullPointerException("User isn't in memory?");
-        }
-        return true;
+    private void showAllCurrenciesGUI(Player player) {
+        Wallet wallet = this.walletManager.getWallets().get(player.getUniqueId());
+
+        MiddleGUIWindow guiWindow = new MiddleGUIWindow() {
+            @Override
+            public void onCreate(Player player) {
+                List<AbstractGUIButton> buttons = new ArrayList<>();
+
+                int slot = 0;
+                for (Map.Entry<UUID, CurrencyWallet> uuidCurrencyWalletEntry : wallet.getCurrencyWallets().entrySet()) {
+                    UUID uuid = uuidCurrencyWalletEntry.getKey();
+                    CurrencyWallet currencyWallet = uuidCurrencyWalletEntry.getValue();
+
+                    ItemStack itemStack = InventoryUtils.createItem(Material.DIAMOND, 1, currencyWallet.getCurrencyUUID().toString(), String.valueOf(currencyWallet.getAmount()));
+
+                    ClickEventButton button = new ClickEventButton(slot, itemStack, (event) -> {
+                    });
+
+                    slot += 1;
+
+                    buttons.add(button);
+                }
+
+                this.update(buttons, "Testing", null);
+            }
+
+            @Override
+            public void onClose(InventoryCloseEvent event) {
+
+            }
+        };
+
+        guiWindow.open(player);
     }
 }

@@ -1,5 +1,7 @@
 package com.andrew121410.mc.world16economy.currency;
 
+import org.bukkit.Material;
+
 import java.util.UUID;
 
 public class Currency {
@@ -15,10 +17,11 @@ public class Currency {
     private String symbol;
     private String currencyNameSingular;
     private String currencyNamePlural;
+    private Material itemMaterial;
 
     private double defaultMoney;
 
-    public Currency(String name, String symbol, String currencyNameSingular, String currencyNamePlural, long defaultMoney) {
+    public Currency(String name, String symbol, String currencyNameSingular, String currencyNamePlural, double defaultMoney) {
         this.uuid = UUID.randomUUID();
 
         this.name = name;
@@ -27,10 +30,12 @@ public class Currency {
         this.currencyNamePlural = currencyNamePlural;
         this.defaultMoney = defaultMoney;
 
+        this.itemMaterial = Material.GOLD_NUGGET;
+
         this.mobDropManager = new MobDropManager();
     }
 
-    public Currency(String name, UUID uuid, boolean defaultCurrency, MobDropManager mobDropManager, String symbol, String currencyNameSingular, String currencyNamePlural, Double defaultMoney) {
+    public Currency(String name, UUID uuid, boolean defaultCurrency, MobDropManager mobDropManager, String symbol, String currencyNameSingular, String currencyNamePlural, Material itemMaterial, double defaultMoney) {
         this.name = name;
         this.uuid = uuid;
         this.defaultCurrency = defaultCurrency;
@@ -38,6 +43,7 @@ public class Currency {
         this.symbol = symbol;
         this.currencyNameSingular = currencyNameSingular;
         this.currencyNamePlural = currencyNamePlural;
+        this.itemMaterial = itemMaterial;
         this.defaultMoney = defaultMoney;
     }
 

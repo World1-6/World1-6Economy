@@ -1,5 +1,6 @@
 package com.andrew121410.mc.world16economy.user;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ public class Wallet {
     private Map<UUID, CurrencyWallet> currencyWallets;
 
     public Wallet(UUID owner) {
+        this.currencyWallets = new HashMap<>();
         this.uuid = owner;
     }
 

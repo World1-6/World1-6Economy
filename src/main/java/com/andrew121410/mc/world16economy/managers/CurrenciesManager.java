@@ -9,10 +9,10 @@ import java.util.UUID;
 
 public class CurrenciesManager {
 
-    private Map<String, Currency> currenciesByName;
     private Map<UUID, Currency> currenciesByUUID;
+    private Map<String, Currency> currenciesByName;
 
-    private Currency defaultCurrency;
+    private UUID defaultCurrencyUUID;
 
     public CurrenciesManager(World16Economy plugin) {
         this.currenciesByName = new HashMap<>();
@@ -31,6 +31,16 @@ public class CurrenciesManager {
         }
     }
 
+    public void setupFirstDefaultCurrency() {
+        if (this.currenciesByUUID.size() == 0) {
+            Currency currency = new Currency("default", "$", "Dollar", "Dollars", 100);
+            this.addCurrency(currency);
+            this.setDefaultCurrencyUUID(currency.getUuid());
+
+            World16Economy.getPlugin().getStorageManager().saveDefaultCurrencyUUID();
+        }
+    }
+
     public void addCurrency(Currency currency) {
         this.currenciesByName.put(currency.getName(), currency);
         this.currenciesByUUID.put(currency.getUuid(), currency);
@@ -39,6 +49,10 @@ public class CurrenciesManager {
     public void removeCurrency(Currency currency) {
         this.currenciesByName.remove(currency.getName());
         this.currenciesByUUID.remove(currency.getUuid());
+    }
+
+    public Currency getDefaultCurrency() {
+        return this.currenciesByUUID.get(this.defaultCurrencyUUID);
     }
 
     public Currency getCurrencyByName(String name) {
@@ -57,12 +71,12 @@ public class CurrenciesManager {
         return this.currenciesByUUID.containsKey(uuid);
     }
 
-    public Currency getDefaultCurrency() {
-        return defaultCurrency;
+    public UUID getDefaultCurrencyUUID() {
+        return defaultCurrencyUUID;
     }
 
-    public void setDefaultCurrency(Currency defaultCurrency) {
-        this.defaultCurrency = defaultCurrency;
+    public void setDefaultCurrencyUUID(UUID defaultCurrencyUUID) {
+        this.defaultCurrencyUUID = defaultCurrencyUUID;
     }
 
     public Map<UUID, Currency> getCurrenciesByUUID() {
