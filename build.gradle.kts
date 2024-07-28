@@ -1,5 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+//    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
     `java-library`
     `maven-publish`
 }
@@ -7,7 +8,7 @@ plugins {
 group = "com.andrew121410.mc"
 version = "1.0-SNAPSHOT"
 description = "world1-6economy"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks {
     build {
@@ -62,8 +63,8 @@ repositories {
 
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:689667e575")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:634da50bcc")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 }
 
