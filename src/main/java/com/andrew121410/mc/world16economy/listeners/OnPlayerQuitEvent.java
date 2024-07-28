@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16economy.listeners;
 
 import com.andrew121410.mc.world16economy.World16Economy;
+import com.andrew121410.mc.world16economy.user.Wallet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,8 @@ public class OnPlayerQuitEvent implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        this.plugin.getUserWalletManager().save(player);
+        Wallet wallet = this.plugin.getWalletManager().getWallets().get(player.getUniqueId());
+        if (wallet == null) return; // Should never happen. (just in case)
+        this.plugin.getStorageManager().saveWallet(wallet, true);
     }
 }

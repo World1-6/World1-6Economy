@@ -1,29 +1,24 @@
 package com.andrew121410.mc.world16economy;
 
 import com.andrew121410.mc.world16economy.commands.bal;
-import com.andrew121410.mc.world16economy.commands.eco;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerJoinEvent;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerQuitEvent;
-import com.andrew121410.mc.world16economy.managers.UserWalletManager;
-import com.andrew121410.mc.world16economy.managers.VaultManager;
-import com.andrew121410.mc.world16economy.objects.UserWallet;
-import com.andrew121410.mc.world16economy.utils.API;
+import com.andrew121410.mc.world16economy.managers.CurrenciesManager;
+import com.andrew121410.mc.world16economy.managers.WalletManager;
+import com.andrew121410.mc.world16economy.storage.StorageManager;
 import com.andrew121410.mc.world16utils.updater.UpdateManager;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.UUID;
 
 public class World16Economy extends JavaPlugin {
 
     private static World16Economy plugin;
 
-    static {
-        ConfigurationSerialization.registerClass(UserWallet.class, "UserWallet");
-    }
+    private CurrenciesManager currenciesManager;
+    private WalletManager walletManager;
 
-    private API api;
-
-    private VaultManager vaultManager;
-    private UserWalletManager userWalletManager;
+    private StorageManager storageManager;
 
     public static World16Economy getPlugin() {
         return plugin;
@@ -31,9 +26,7 @@ public class World16Economy extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
-        this.api = new API(this);
 
-        registerDefaultConfig();
         registerManagers();
         registerListeners();
         registerCommands();
@@ -42,11 +35,12 @@ public class World16Economy extends JavaPlugin {
     }
 
     public void onDisable() {
+        // Save all the currencies.
+        this.storageManager.saveAllCurrencies();
     }
 
     private void registerCommands() {
         new bal(this);
-        new eco(this);
     }
 
     private void registerListeners() {
@@ -55,28 +49,31 @@ public class World16Economy extends JavaPlugin {
     }
 
     private void registerManagers() {
-        this.userWalletManager = new UserWalletManager(this);
-        this.vaultManager = new VaultManager(this);
+        this.currenciesManager = new CurrenciesManager(this);
+        this.walletManager = new WalletManager(this);
+
+        this.storageManager = new StorageManager(this);
+        // Load all the currencies.
+        this.storageManager.loadAllCurrencies();
+        // Set the default currency.
+        UUID defaultCurrencyUUID = this.storageManager.loadDefaultCurrencyUUID();
+        if (defaultCurrencyUUID != null) {
+            this.currenciesManager.setDefaultCurrencyUUID(defaultCurrencyUUID);
+        }
+
+        // Last is Vault
+        new VaultCore(this);
     }
 
-    private void registerDefaultConfig() {
-        this.getConfig().addDefault("defaultMoney", api.getDefaultMoney());
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-        this.reloadConfig();
-
-        this.api.setDefaultMoney(this.getConfig().getLong("defaultMoney"));
+    public CurrenciesManager getCurrenciesManager() {
+        return currenciesManager;
     }
 
-    public VaultManager getVaultManager() {
-        return vaultManager;
+    public WalletManager getWalletManager() {
+        return walletManager;
     }
 
-    public UserWalletManager getUserWalletManager() {
-        return userWalletManager;
-    }
-
-    public API getApi() {
-        return api;
+    public StorageManager getStorageManager() {
+        return storageManager;
     }
 }
