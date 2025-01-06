@@ -1,13 +1,13 @@
 plugins {
-//    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.github.goooler.shadow") version "8.1.7" // https://github.com/johnrengelman/shadow/pull/876 https://github.com/Goooler/shadow https://plugins.gradle.org/plugin/io.github.goooler.shadow
+    id("com.gradleup.shadow") version "8.3.5"
     `java-library`
     `maven-publish`
 }
 
 group = "com.andrew121410.mc"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 description = "world1-6economy"
+java.targetCompatibility = JavaVersion.VERSION_21
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks {
@@ -33,8 +33,8 @@ tasks {
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 
     maven {
         url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -63,8 +63,8 @@ repositories {
 
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:634da50bcc")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:691fb8421a")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 }
 
