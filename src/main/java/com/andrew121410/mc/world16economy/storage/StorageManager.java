@@ -10,9 +10,9 @@ import com.andrew121410.mc.world16economy.storage.serializers.WalletSerializer;
 import com.andrew121410.mc.world16economy.user.CurrencyWallet;
 import com.andrew121410.mc.world16economy.user.Wallet;
 import com.andrew121410.mc.world16utils.config.World16ConfigurateManager;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.CommentedConfigurationNode;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.serialize.TypeSerializerCollection;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.CommentedConfigurationNode;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.serialize.TypeSerializerCollection;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.util.Map;
 import java.util.UUID;

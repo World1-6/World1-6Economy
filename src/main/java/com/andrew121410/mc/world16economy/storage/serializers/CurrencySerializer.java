@@ -3,9 +3,9 @@ package com.andrew121410.mc.world16economy.storage.serializers;
 import com.andrew121410.mc.world16economy.currency.Currency;
 import com.andrew121410.mc.world16economy.currency.MobDropManager;
 import com.andrew121410.mc.world16utils.config.serializers.SerializerUtils;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.ConfigurationNode;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.serialize.SerializationException;
-import com.andrew121410.mc.world16utils.utils.spongepowered.configurate.serialize.TypeSerializer;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.ConfigurationNode;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.serialize.SerializationException;
+import com.andrew121410.mc.world16utils.dependencies.spongepowered.configurate.serialize.TypeSerializer;
 import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
