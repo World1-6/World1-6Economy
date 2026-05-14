@@ -149,23 +149,17 @@ All GUIs use a custom framework from World1-6Utils. Key classes:
 
 ## Wallet Save Rules
 
-**Wallets must be saved immediately after any mutation.** Do not rely solely on the quit event or onDisable. Every place that calls `addAmount`, `subtractAmount`, or `setBalanceExact` on a `CurrencyWallet` must follow up with:
+**All wallets are loaded into memory on startup** via `StorageManager.loadAllWallets()`. There is no longer a distinction between online and offline players — every wallet is always in `WalletManager.getWallets()`.
+
+**Wallets must be saved immediately after any mutation.** Every place that calls `addAmount`, `subtractAmount`, or `setBalanceExact` on a `CurrencyWallet` must follow up with:
 
 ```java
-Wallet wallet = plugin.getWalletManager().getWallets().get(playerUUID);
-if (wallet != null) plugin.getStorageManager().saveWallet(wallet, false);
+plugin.getStorageManager().saveWallet(wallet);
 ```
 
-For offline players (wallet not in cache), load → mutate → save → do not add to cache:
-```java
-Wallet wallet = plugin.getStorageManager().loadWallet(playerUUID, false, true);
-// mutate
-plugin.getStorageManager().saveWallet(wallet, false);
-```
+`OnPlayerJoinEvent` only creates a new wallet for players who have never played before (not in the map). `OnPlayerQuitEvent` saves the wallet to disk but does not remove it from memory. `onDisable` saves all wallets as a final safety net.
 
-`saveWallet(wallet, true)` saves and removes from cache — used only in `OnPlayerQuitEvent`.
-
-`onDisable` also saves all cached wallets as a safety net for online players when the server stops.
+For players who have genuinely never joined (e.g. `/eco give` targeting an unknown name), use `walletManager.newUser(uuid, true)` as the fallback — this creates, caches, and saves the wallet.
 
 ---
 

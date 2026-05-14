@@ -101,7 +101,7 @@ All deposits, withdrawals, transfers, and payroll events are recorded and viewab
 | Data | Format | Location |
 |---|---|---|
 | Currencies | YAML | `plugins/World1-6Economy/currencies.yml` |
-| Wallets | YAML | `plugins/World1-6Economy/wallets.yml` |
+| Wallets | YAML | `plugins/World1-6Economy/wallets.yml` (all loaded into memory on startup) |
 | Currency notes | SQLite | `plugins/World1-6Economy/CurrencyNotes.db` |
 | Bank accounts | SQLite | `plugins/World1-6Economy/BankAccounts.db` |
 
