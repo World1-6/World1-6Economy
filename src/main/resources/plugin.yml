@@ -1,7 +1,7 @@
 name: World1-6Economy
 main: com.andrew121410.mc.world16economy.World16Economy
 version: 1.0
-depends:
+depend:
   - Vault
   - World1-6Utils
 api-version: 1.19
