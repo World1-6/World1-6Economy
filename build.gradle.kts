@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "8.3.10"
     `java-library`
     `maven-publish`
 }
