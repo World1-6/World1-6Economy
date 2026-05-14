@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "9.4.1" // https://github.com/GradleUp/shadow
     `java-library`
     `maven-publish`
 }
@@ -7,8 +7,8 @@ plugins {
 group = "com.andrew121410.mc"
 version = "1.0.0"
 description = "world1-6economy"
-java.targetCompatibility = JavaVersion.VERSION_21
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_25
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 tasks {
     build {
@@ -27,8 +27,6 @@ tasks {
         archiveBaseName.set("World1-6Economy")
         archiveClassifier.set("")
         archiveVersion.set("")
-
-//        relocate("org.bstats", "com.andrew121410.mc.world16essentials.bstats")
     }
 }
 
@@ -37,11 +35,11 @@ repositories {
     mavenCentral()
 
     maven {
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
 
     maven {
-        url = uri("https://repo.papermc.io/repository/maven-public/")
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 
     maven {
@@ -63,15 +61,17 @@ repositories {
 
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:2f0bf39de7")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.63-stable")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:ab7a07dd78")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") {
         exclude(group = "org.bukkit", module = "bukkit")
     }
 }
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("shadow") {
+            artifact(tasks.named("shadowJar"))
+        }
     }
 }
