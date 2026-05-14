@@ -78,7 +78,7 @@ public class OnNoteRedeemListener implements Listener {
         CurrencyWallet currencyWallet = wallet.getCurrencyWallets()
                 .computeIfAbsent(currencyUUID, uuid -> new CurrencyWallet(uuid, 0));
         currencyWallet.addAmount(amount);
-        plugin.getStorageManager().saveWallet(wallet, false);
+        plugin.getStorageManager().saveWallet(wallet);
 
         // Remove the note item from the player's hand
         item.setAmount(item.getAmount() - 1);

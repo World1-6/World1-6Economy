@@ -19,6 +19,8 @@ public class OnPlayerJoinEvent implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        this.plugin.getStorageManager().loadWallet(player.getUniqueId(), true, true);
+        if (!this.plugin.getWalletManager().hasWallet(player.getUniqueId())) {
+            this.plugin.getWalletManager().newUser(player.getUniqueId(), true);
+        }
     }
 }

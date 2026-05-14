@@ -73,7 +73,7 @@ public class eco implements CommandExecutor, TabCompleter {
                 if (currency == null) return;
                 Wallet wallet = getOrLoadWallet(target);
                 wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0)).addAmount(amount);
-                plugin.getStorageManager().saveWallet(wallet, false);
+                plugin.getStorageManager().saveWallet(wallet);
                 sender.sendMessage(Translate.miniMessage("<green>✔ Gave <white>" + String.format("%,.2f", amount) + " " + currency.getCurrencyNamePlural() + " <green>to <white>" + target.getName() + "<green>."));
                 if (target.isOnline()) ((Player) target).sendMessage(Translate.miniMessage("<green>✔ You received <white>" + String.format("%,.2f", amount) + " " + currency.getCurrencyNamePlural() + "<green>."));
             }
@@ -87,7 +87,7 @@ public class eco implements CommandExecutor, TabCompleter {
                 Wallet wallet = getOrLoadWallet(target);
                 CurrencyWallet cw = wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0));
                 cw.subtractAmount(Math.min(amount, cw.getBalanceExact()));
-                plugin.getStorageManager().saveWallet(wallet, false);
+                plugin.getStorageManager().saveWallet(wallet);
                 sender.sendMessage(Translate.miniMessage("<green>✔ Took <white>" + String.format("%,.2f", amount) + " " + currency.getCurrencyNamePlural() + " <green>from <white>" + target.getName() + "<green>."));
                 if (target.isOnline()) ((Player) target).sendMessage(Translate.miniMessage("<red>✖ <white>" + String.format("%,.2f", amount) + " " + currency.getCurrencyNamePlural() + " <red>was taken from your wallet."));
             }
@@ -100,7 +100,7 @@ public class eco implements CommandExecutor, TabCompleter {
                 if (currency == null) return;
                 Wallet wallet = getOrLoadWallet(target);
                 wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0)).setBalanceExact(amount);
-                plugin.getStorageManager().saveWallet(wallet, false);
+                plugin.getStorageManager().saveWallet(wallet);
                 sender.sendMessage(Translate.miniMessage("<green>✔ Set <white>" + target.getName() + "<green>'s balance to <white>" + String.format("%,.2f", amount) + " " + currency.getCurrencyNamePlural() + "<green>."));
             }
             case "reset" -> {
@@ -110,7 +110,7 @@ public class eco implements CommandExecutor, TabCompleter {
                 if (currency == null) return;
                 Wallet wallet = getOrLoadWallet(target);
                 wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0)).setBalanceExact(0);
-                plugin.getStorageManager().saveWallet(wallet, false);
+                plugin.getStorageManager().saveWallet(wallet);
                 sender.sendMessage(Translate.miniMessage("<green>✔ Reset <white>" + target.getName() + "<green>'s " + currency.getName() + " balance to 0."));
             }
             default -> sender.sendMessage(Translate.miniMessage("<red>Unknown subcommand. Use: give, take, set, reset, or just /eco to open the GUI."));
@@ -146,7 +146,7 @@ public class eco implements CommandExecutor, TabCompleter {
     private Wallet getOrLoadWallet(OfflinePlayer player) {
         Wallet wallet = plugin.getWalletManager().getWallets().get(player.getUniqueId());
         if (wallet == null) {
-            wallet = plugin.getStorageManager().loadWallet(player.getUniqueId(), false, true);
+            wallet = plugin.getWalletManager().newUser(player.getUniqueId(), true);
         }
         return wallet;
     }

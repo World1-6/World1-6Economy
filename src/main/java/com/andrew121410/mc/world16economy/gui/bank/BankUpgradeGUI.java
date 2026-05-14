@@ -79,7 +79,7 @@ public class BankUpgradeGUI {
                                     }
                                     cw.subtractAmount(next.getCreationCost());
                                     Wallet w2 = plugin.getWalletManager().getWallets().get(player.getUniqueId());
-                                    if (w2 != null) plugin.getStorageManager().saveWallet(w2, false);
+                                    if (w2 != null) plugin.getStorageManager().saveWallet(w2);
                                 }
                                 account.setTierLevel(next.getLevel());
                                 plugin.getBankManager().saveAccount(account);

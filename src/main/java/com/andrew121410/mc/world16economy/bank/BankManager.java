@@ -205,18 +205,15 @@ public class BankManager {
                 storage.saveBalance(destAccount.getAccountUUID(), currencyUUID, destAccount.getBalance(currencyUUID));
                 recordTransaction(destAccount, BankTransaction.Type.PAYROLL_IN, currencyUUID, wage, actor);
             } else {
-                // Pay into employee's personal wallet — load from disk if offline
+                // Pay into employee's personal wallet
                 Wallet wallet = plugin.getWalletManager().getWallets().get(member.getPlayerUUID());
-                boolean offline = wallet == null;
-                if (offline) {
-                    wallet = plugin.getStorageManager().loadWallet(member.getPlayerUUID(), false, true);
+                if (wallet == null) {
+                    wallet = plugin.getWalletManager().newUser(member.getPlayerUUID(), true);
                 }
-                if (wallet != null) {
-                    wallet.getCurrencyWallets()
-                            .computeIfAbsent(currencyUUID, uuid -> new CurrencyWallet(uuid, 0))
-                            .addAmount(wage);
-                    plugin.getStorageManager().saveWallet(wallet, false);
-                }
+                wallet.getCurrencyWallets()
+                        .computeIfAbsent(currencyUUID, uuid -> new CurrencyWallet(uuid, 0))
+                        .addAmount(wage);
+                plugin.getStorageManager().saveWallet(wallet);
             }
 
             notifyPlayer(member.getPlayerUUID(), "<green>✔ You received a payroll payment of <white>"

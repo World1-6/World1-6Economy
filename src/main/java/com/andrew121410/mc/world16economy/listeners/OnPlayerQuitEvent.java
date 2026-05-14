@@ -22,6 +22,6 @@ public class OnPlayerQuitEvent implements Listener {
 
         Wallet wallet = this.plugin.getWalletManager().getWallets().get(player.getUniqueId());
         if (wallet == null) return; // Should never happen. (just in case)
-        this.plugin.getStorageManager().saveWallet(wallet, true);
+        this.plugin.getStorageManager().saveWallet(wallet);
     }
 }

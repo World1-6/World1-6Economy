@@ -96,42 +96,24 @@ public class StorageManager {
         saveDefaultCurrencyUUID();
     }
 
-    public Wallet loadWallet(UUID userUuid, boolean addToCache, boolean createIfNotExist) {
+    public void loadAllWallets() {
         try {
             CommentedConfigurationNode node = this.walletsYml.load().node("Wallets");
-
-            // If the wallet is virtual, and we don't want to create it.
-            if (node.node(userUuid).virtual() && !createIfNotExist) {
-                return null;
+            for (Map.Entry<Object, CommentedConfigurationNode> entry : node.childrenMap().entrySet()) {
+                UUID uuid = UUID.fromString((String) entry.getKey());
+                Wallet wallet = entry.getValue().get(Wallet.class);
+                if (wallet != null) {
+                    this.walletManager.getWallets().put(uuid, wallet);
+                }
             }
-
-            // If the wallet is virtual, and we want to create it.
-            if (node.node(userUuid).virtual() && createIfNotExist) {
-                return this.walletManager.newUser(userUuid, true);
-            }
-
-            Wallet wallet = node.node(userUuid).get(Wallet.class);
-
-            if (addToCache) {
-                this.walletManager.getWallets().put(userUuid, wallet);
-            }
-
-            return wallet;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
-    public void saveWallet(Wallet wallet, boolean removeFromCache) {
+    public void saveWallet(Wallet wallet) {
         try {
             CommentedConfigurationNode node = this.walletsYml.load().node("Wallets");
-
-            if (removeFromCache) {
-                this.walletManager.getWallets().remove(wallet.getUuid());
-            }
-
             node.node(wallet.getUuid().toString()).set(wallet);
             this.walletsYml.save(node);
         } catch (Exception e) {

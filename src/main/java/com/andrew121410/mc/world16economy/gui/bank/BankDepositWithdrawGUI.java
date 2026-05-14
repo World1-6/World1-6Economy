@@ -268,7 +268,7 @@ public class BankDepositWithdrawGUI {
         }
 
         cw.subtractAmount(amount);
-        plugin.getStorageManager().saveWallet(wallet, false);
+        plugin.getStorageManager().saveWallet(wallet);
         account.addBalance(currency.getUuid(), amount);
         plugin.getBankManager().saveBalances(account);
         plugin.getBankManager().recordTransaction(account, BankTransaction.Type.DEPOSIT, currency.getUuid(), amount, player.getUniqueId());
@@ -298,7 +298,7 @@ public class BankDepositWithdrawGUI {
         Wallet wallet = plugin.getWalletManager().getWallets().get(player.getUniqueId());
         if (wallet != null) {
             wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0)).addAmount(amount);
-            plugin.getStorageManager().saveWallet(wallet, false);
+            plugin.getStorageManager().saveWallet(wallet);
         }
         plugin.getBankManager().recordTransaction(account, BankTransaction.Type.WITHDRAWAL, currency.getUuid(), amount, player.getUniqueId());
 

@@ -47,7 +47,7 @@ public class World16Economy extends JavaPlugin {
         this.storageManager.saveAllCurrencies();
         // Save all cached wallets (covers players still online when server stops)
         this.walletManager.getWallets().values().forEach(wallet ->
-                this.storageManager.saveWallet(wallet, false));
+                this.storageManager.saveWallet(wallet));
     }
 
     private void registerCommands() {
@@ -76,6 +76,8 @@ public class World16Economy extends JavaPlugin {
         if (defaultCurrencyUUID != null) {
             this.currenciesManager.setDefaultCurrencyUUID(defaultCurrencyUUID);
         }
+        // Load all wallets into memory on startup.
+        this.storageManager.loadAllWallets();
 
         this.noteManager = new NoteManager(this);
         this.bankManager = new BankManager(this);

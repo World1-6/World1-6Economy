@@ -91,7 +91,7 @@ public class CurrencyWalletGUI {
 
                             currencyWallet.subtractAmount(amount);
                             Wallet walletToSave = plugin.getWalletManager().getWallets().get(p.getUniqueId());
-                            if (walletToSave != null) plugin.getStorageManager().saveWallet(walletToSave, false);
+                            if (walletToSave != null) plugin.getStorageManager().saveWallet(walletToSave);
 
                             ItemStack noteItem = plugin.getNoteManager().createNote(p.getUniqueId(), currency, amount);
                             if (noteItem == null) {

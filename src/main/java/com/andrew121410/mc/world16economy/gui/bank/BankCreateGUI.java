@@ -78,7 +78,7 @@ public class BankCreateGUI {
                                     }
                                     cw.subtractAmount(cost);
                                     Wallet w = plugin.getWalletManager().getWallets().get(p.getUniqueId());
-                                    if (w != null) plugin.getStorageManager().saveWallet(w, false);
+                                    if (w != null) plugin.getStorageManager().saveWallet(w);
                                 }
                             }
 

@@ -32,7 +32,7 @@ public class WalletManager {
         this.wallets.put(uuid, wallet);
 
         if (saveNow) {
-            this.plugin.getStorageManager().saveWallet(wallet, false);
+            this.plugin.getStorageManager().saveWallet(wallet);
         }
 
         return wallet;

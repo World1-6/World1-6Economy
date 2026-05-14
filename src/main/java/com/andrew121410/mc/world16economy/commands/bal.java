@@ -79,9 +79,6 @@ public class bal implements CommandExecutor {
         Wallet wallet = this.walletManager.getWallets().get(target.getUniqueId());
 
         if (wallet == null) {
-            wallet = this.plugin.getStorageManager().loadWallet(target.getUniqueId(), false, false);
-        }
-        if (wallet == null) {
             player.sendMessage(Translate.miniMessage("<red>That player most likely doesn't exist in the database."));
             return;
         }

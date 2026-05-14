@@ -175,7 +175,7 @@ public class VaultCore implements Economy {
         if (currencyWallet.hasRequiredAmount(amount)) {
             currencyWallet.subtractAmount(amount);
             Wallet vaultWallet = this.userWalletMap.get(UUID.fromString(uuid));
-            if (vaultWallet != null) this.plugin.getStorageManager().saveWallet(vaultWallet, false);
+            if (vaultWallet != null) this.plugin.getStorageManager().saveWallet(vaultWallet);
 
             if (player != null) {
                 String symbol = this.currenciesManager.getDefaultCurrency().getSymbol();
@@ -217,7 +217,7 @@ public class VaultCore implements Economy {
 
         currencyWallet.addAmount(amount);
         Wallet vaultWallet = this.userWalletMap.get(UUID.fromString(uuid));
-        if (vaultWallet != null) this.plugin.getStorageManager().saveWallet(vaultWallet, false);
+        if (vaultWallet != null) this.plugin.getStorageManager().saveWallet(vaultWallet);
 
         if (player != null) {
             String symbol = this.currenciesManager.getDefaultCurrency().getSymbol();

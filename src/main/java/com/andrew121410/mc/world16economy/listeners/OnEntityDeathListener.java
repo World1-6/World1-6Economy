@@ -65,7 +65,7 @@ public class OnEntityDeathListener implements Listener {
                             uuid -> new CurrencyWallet(uuid, 0)
                     );
                     currencyWallet.addAmount(amount);
-                    plugin.getStorageManager().saveWallet(wallet, false);
+                    plugin.getStorageManager().saveWallet(wallet);
 
                     killer.sendActionBar(MiniMessage.miniMessage().deserialize(
                             currency.getColor() + "+" + amount + " " + currencyName
