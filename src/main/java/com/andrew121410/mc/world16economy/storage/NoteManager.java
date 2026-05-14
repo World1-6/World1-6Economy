@@ -91,6 +91,18 @@ public class NoteManager {
         }
     }
 
+    public int countNotesByCurrency(UUID currencyUUID) {
+        SQLDataStore query = new SQLDataStore();
+        query.put("CurrencyUUID", currencyUUID.toString());
+        try {
+            Multimap<String, SQLDataStore> result = easySQL.get(query);
+            if (result != null) return result.size();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     // Reads the note UUID from an item's PersistentDataContainer, or null if not a note.
     public UUID getNoteUUID(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;

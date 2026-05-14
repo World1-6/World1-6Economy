@@ -178,6 +178,17 @@ For players who have genuinely never joined (e.g. `/eco give` targeting an unkno
 - `defaultBalance` — given to new players on wallet creation
 - `mobDropManager` — `MobDropManager` containing `List<MobDropEntry>`
 
+### Currency deletion rules
+Deletion is blocked (with a specific message per reason) if any of the following are true:
+1. It is the **default currency** — admin must set a different currency as default first
+2. It is the **only currency** — cannot leave the system with zero currencies
+3. Any **player wallet** has a non-zero balance in this currency
+4. Any **bank account** holds a non-zero balance in this currency
+5. Any **outstanding notes** exist for this currency (unredeemed physical items)
+6. Any **payroll** is configured to pay in this currency
+
+These checks live in `CurrencyEditGUI`. The count helpers are on `WalletManager.countWalletsWithBalance()`, `BankManager.countAccountsWithBalance()`, `BankManager.countPayrollsUsing()`, and `NoteManager.countNotesByCurrency()`.
+
 ---
 
 ## Bank System

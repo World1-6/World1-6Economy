@@ -45,4 +45,13 @@ public class WalletManager {
     public boolean hasWallet(UUID uuid) {
         return this.wallets.containsKey(uuid);
     }
+
+    public long countWalletsWithBalance(UUID currencyUUID) {
+        return this.wallets.values().stream()
+                .filter(w -> {
+                    CurrencyWallet cw = w.getCurrencyWallet(currencyUUID);
+                    return cw != null && cw.getBalanceExact() > 0;
+                })
+                .count();
+    }
 }

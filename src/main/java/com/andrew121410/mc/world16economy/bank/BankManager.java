@@ -286,6 +286,20 @@ public class BankManager {
         return amount % 1 == 0 ? String.valueOf((long) amount) : String.valueOf(amount);
     }
 
+    public long countAccountsWithBalance(UUID currencyUUID) {
+        return accounts.values().stream()
+                .filter(a -> a.getBalance(currencyUUID) > 0)
+                .count();
+    }
+
+    public long countPayrollsUsing(UUID currencyUUID) {
+        return accounts.values().stream()
+                .filter(a -> a.isBusiness()
+                        && a.getScheduledPayroll() != null
+                        && currencyUUID.equals(a.getScheduledPayroll().getCurrencyUUID()))
+                .count();
+    }
+
     public BankStorage getStorage() {
         return storage;
     }

@@ -221,18 +221,32 @@ public class CurrencyEditGUI extends GUIWindow {
                         Translate.miniMessage("<red><bold>Delete Currency"),
                         Translate.miniMessage("<gray>This cannot be undone")),
                 event -> {
-                    boolean deletingDefault = currency.getUuid().equals(plugin.getCurrenciesManager().getDefaultCurrencyUUID());
-                    if (deletingDefault) {
-                        // Find another currency to become the new default
-                        Currency next = plugin.getCurrenciesManager().getCurrenciesByUUID().values().stream()
-                                .filter(c -> !c.getUuid().equals(currency.getUuid()))
-                                .findFirst().orElse(null);
-                        if (next == null) {
-                            player.sendMessage(Translate.miniMessage("<red>✖ Cannot delete the only currency."));
-                            return;
-                        }
-                        plugin.getCurrenciesManager().setDefaultCurrencyUUID(next.getUuid());
+                    if (plugin.getCurrenciesManager().getCurrenciesByUUID().size() <= 1) {
+                        player.sendMessage(Translate.miniMessage("<red>✖ Cannot delete the only currency."));
+                        return;
                     }
+
+                    if (currency.getUuid().equals(plugin.getCurrenciesManager().getDefaultCurrencyUUID())) {
+                        player.sendMessage(Translate.miniMessage("<red>✖ Cannot delete the default currency. Set a different currency as default first."));
+                        return;
+                    }
+
+                    // Block deletion if anything still references this currency
+                    long walletCount = plugin.getWalletManager().countWalletsWithBalance(currency.getUuid());
+                    long bankCount = plugin.getBankManager().countAccountsWithBalance(currency.getUuid());
+                    long noteCount = plugin.getNoteManager().countNotesByCurrency(currency.getUuid());
+                    long payrollCount = plugin.getBankManager().countPayrollsUsing(currency.getUuid());
+
+                    boolean blocked = walletCount > 0 || bankCount > 0 || noteCount > 0 || payrollCount > 0;
+                    if (blocked) {
+                        player.sendMessage(Translate.miniMessage("<red>✖ Cannot delete <white>" + currency.getName() + " <red>— it is still in use:"));
+                        if (walletCount > 0) player.sendMessage(Translate.miniMessage("<dark_gray>▸ <white>" + walletCount + " <gray>player wallet(s) have a non-zero balance"));
+                        if (bankCount > 0) player.sendMessage(Translate.miniMessage("<dark_gray>▸ <white>" + bankCount + " <gray>bank account(s) hold a balance"));
+                        if (noteCount > 0) player.sendMessage(Translate.miniMessage("<dark_gray>▸ <white>" + noteCount + " <gray>outstanding note(s) exist"));
+                        if (payrollCount > 0) player.sendMessage(Translate.miniMessage("<dark_gray>▸ <white>" + payrollCount + " <gray>payroll(s) are configured to pay in this currency"));
+                        return;
+                    }
+
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
                     plugin.getCurrenciesManager().removeCurrency(currency);
                     save();
