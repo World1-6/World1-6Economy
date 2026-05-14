@@ -11,6 +11,8 @@ commands:
     aliases:
       - money
   eco:
+  withdraw:
+  bank:
 
 permissions:
   world16.bal:
@@ -44,3 +46,11 @@ permissions:
       world16.eco.set: true
       world16.eco.reset: true
       world16.eco.debug: true
+
+  world16.withdraw:
+    description: Allows withdrawing currency as a physical note item
+    default: true
+
+  world16.bank:
+    description: Allows access to bank accounts
+    default: true

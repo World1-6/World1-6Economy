@@ -1,10 +1,17 @@
 package com.andrew121410.mc.world16economy;
 
+import com.andrew121410.mc.world16economy.bank.BankManager;
 import com.andrew121410.mc.world16economy.commands.bal;
+import com.andrew121410.mc.world16economy.commands.bank;
+import com.andrew121410.mc.world16economy.commands.eco;
+import com.andrew121410.mc.world16economy.commands.withdraw;
+import com.andrew121410.mc.world16economy.listeners.OnEntityDeathListener;
+import com.andrew121410.mc.world16economy.listeners.OnNoteRedeemListener;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerJoinEvent;
 import com.andrew121410.mc.world16economy.listeners.OnPlayerQuitEvent;
 import com.andrew121410.mc.world16economy.managers.CurrenciesManager;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
+import com.andrew121410.mc.world16economy.storage.NoteManager;
 import com.andrew121410.mc.world16economy.storage.StorageManager;
 import com.andrew121410.mc.world16utils.updater.UpdateManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,8 +24,10 @@ public class World16Economy extends JavaPlugin {
 
     private CurrenciesManager currenciesManager;
     private WalletManager walletManager;
+    private BankManager bankManager;
 
     private StorageManager storageManager;
+    private NoteManager noteManager;
 
     public static World16Economy getPlugin() {
         return plugin;
@@ -35,17 +44,24 @@ public class World16Economy extends JavaPlugin {
     }
 
     public void onDisable() {
-        // Save all the currencies.
         this.storageManager.saveAllCurrencies();
+        // Save all cached wallets (covers players still online when server stops)
+        this.walletManager.getWallets().values().forEach(wallet ->
+                this.storageManager.saveWallet(wallet, false));
     }
 
     private void registerCommands() {
         new bal(this);
+        new eco(this);
+        new withdraw(this);
+        new bank(this);
     }
 
     private void registerListeners() {
         new OnPlayerJoinEvent(this);
         new OnPlayerQuitEvent(this);
+        new OnEntityDeathListener(this);
+        new OnNoteRedeemListener(this);
     }
 
     private void registerManagers() {
@@ -61,6 +77,9 @@ public class World16Economy extends JavaPlugin {
             this.currenciesManager.setDefaultCurrencyUUID(defaultCurrencyUUID);
         }
 
+        this.noteManager = new NoteManager(this);
+        this.bankManager = new BankManager(this);
+
         // Last is Vault
         new VaultCore(this);
     }
@@ -75,5 +94,13 @@ public class World16Economy extends JavaPlugin {
 
     public StorageManager getStorageManager() {
         return storageManager;
+    }
+
+    public NoteManager getNoteManager() {
+        return noteManager;
+    }
+
+    public BankManager getBankManager() {
+        return bankManager;
     }
 }

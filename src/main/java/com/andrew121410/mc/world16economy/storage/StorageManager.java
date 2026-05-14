@@ -4,8 +4,12 @@ import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.currency.Currency;
 import com.andrew121410.mc.world16economy.managers.CurrenciesManager;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
+import com.andrew121410.mc.world16economy.currency.MobDropEntry;
+import com.andrew121410.mc.world16economy.currency.MobDropManager;
 import com.andrew121410.mc.world16economy.storage.serializers.CurrencySerializer;
 import com.andrew121410.mc.world16economy.storage.serializers.CurrencyWalletSerializer;
+import com.andrew121410.mc.world16economy.storage.serializers.MobDropEntrySerializer;
+import com.andrew121410.mc.world16economy.storage.serializers.MobDropManagerSerializer;
 import com.andrew121410.mc.world16economy.storage.serializers.WalletSerializer;
 import com.andrew121410.mc.world16economy.user.CurrencyWallet;
 import com.andrew121410.mc.world16economy.user.Wallet;
@@ -46,6 +50,8 @@ public class StorageManager {
         typeSerializerCollection.registerExact(Currency.class, new CurrencySerializer());
         typeSerializerCollection.registerExact(Wallet.class, new WalletSerializer());
         typeSerializerCollection.registerExact(CurrencyWallet.class, new CurrencyWalletSerializer());
+        typeSerializerCollection.registerExact(MobDropManager.class, new MobDropManagerSerializer());
+        typeSerializerCollection.registerExact(MobDropEntry.class, new MobDropEntrySerializer());
 
         return typeSerializerCollection.build();
     }

@@ -2,6 +2,7 @@ package com.andrew121410.mc.world16economy.commands;
 
 import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.currency.Currency;
+import com.andrew121410.mc.world16economy.gui.CurrencyWalletGUI;
 import com.andrew121410.mc.world16economy.managers.WalletManager;
 import com.andrew121410.mc.world16economy.user.CurrencyWallet;
 import com.andrew121410.mc.world16economy.user.Wallet;
@@ -97,12 +98,20 @@ public class bal implements CommandExecutor {
                     CurrencyWallet currencyWallet = uuidCurrencyWalletEntry.getValue();
                     Currency currency = plugin.getCurrenciesManager().getCurrencyByUUID(uuid);
 
+                    if (currency == null) continue;
+
                     Component itemName = Translate.miniMessage("<bold>" + currency.getColor() + currencyWallet.getBalanceDecimalFormat() + " " + currency.getCurrencyNamePlural());
                     itemName = itemName.decoration(TextDecoration.ITALIC, false); // Why is it italic anyway?
 
-                    ItemStack itemStack = InventoryUtils.createItem(currency.getItemMaterial(), 1, itemName, Component.empty());
+                    ItemStack itemStack = InventoryUtils.createItem(currency.getItemMaterial(), 1, itemName,
+                            target.getUniqueId().equals(player.getUniqueId())
+                                    ? Translate.miniMessage("<gray>Click to manage")
+                                    : Component.empty());
 
                     ClickEventButton button = new ClickEventButton(slot, itemStack, (event) -> {
+                        // Only the wallet owner can manage their own currencies
+                        if (!target.getUniqueId().equals(player.getUniqueId())) return;
+                        CurrencyWalletGUI.open(plugin, player, currency, currencyWallet);
                     });
 
                     slot += 1; // Doesn't matter

@@ -6,3 +6,6 @@ target/
 .gradle/
 */target
 */build
+
+# jpenilla run task plugin
+/run**

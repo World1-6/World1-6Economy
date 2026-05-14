@@ -1,5 +1,6 @@
 plugins {
     id("com.gradleup.shadow") version "9.4.1" // https://github.com/GradleUp/shadow
+    id("xyz.jpenilla.run-paper") version "3.0.2" // https://github.com/jpenilla/run-task
     `java-library`
     `maven-publish`
 }
@@ -27,6 +28,18 @@ tasks {
         archiveBaseName.set("World1-6Economy")
         archiveClassifier.set("")
         archiveVersion.set("")
+    }
+
+    runServer {
+        dependsOn
+        minecraftVersion("26.1.2")
+
+        // Automatically download and install these plugins on the test server
+        downloadPlugins {
+            github("World1-6", "World1-6Utils", "latest", "World1-6Utils.jar")
+            url("https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar")
+        }
+
     }
 }
 
@@ -62,7 +75,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.63-stable")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:ab7a07dd78")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:852e2aab8c")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") {
         exclude(group = "org.bukkit", module = "bukkit")
     }
