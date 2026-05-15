@@ -31,13 +31,8 @@ public class BankManager {
     // ---- Loading ----
 
     private void loadAll() {
-        // Load tiers first — seed defaults if none exist
-        List<BankTier> loadedTiers = storage.loadAllTiers();
-        if (loadedTiers.isEmpty()) {
-            seedDefaultTiers();
-        } else {
-            loadedTiers.forEach(t -> tiers.put(t.getLevel(), t));
-        }
+        // Load tiers from config
+        plugin.getConfigManager().loadBankTiers().forEach(t -> tiers.put(t.getLevel(), t));
 
         // Load accounts with their balances, members, and payroll
         for (BankAccount account : storage.loadAllAccounts()) {
@@ -48,18 +43,6 @@ public class BankManager {
             }
             accounts.put(account.getAccountUUID(), account);
         }
-    }
-
-    private void seedDefaultTiers() {
-        List<BankTier> defaults = List.of(
-                new BankTier(1, "Basic",    500,    10_000,   1_000),
-                new BankTier(2, "Standard", 2_000,  100_000,  10_000),
-                new BankTier(3, "Premium",  10_000, -1,       -1)
-        );
-        defaults.forEach(t -> {
-            tiers.put(t.getLevel(), t);
-            storage.saveTier(t);
-        });
     }
 
     // ---- Account creation ----
@@ -110,10 +93,6 @@ public class BankManager {
         } else {
             storage.deletePayroll(account.getAccountUUID());
         }
-    }
-
-    public void saveTier(BankTier tier) {
-        storage.saveTier(tier);
     }
 
     // ---- Transactions ----
@@ -236,11 +215,6 @@ public class BankManager {
 
     public boolean hasTier(int level) {
         return tiers.containsKey(level);
-    }
-
-    public void addOrUpdateTier(BankTier tier) {
-        tiers.put(tier.getLevel(), tier);
-        storage.saveTier(tier);
     }
 
     // ---- Queries ----

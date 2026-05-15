@@ -113,9 +113,9 @@ public class StorageManager {
 
     public void saveWallet(Wallet wallet) {
         try {
-            CommentedConfigurationNode node = this.walletsYml.load().node("Wallets");
-            node.node(wallet.getUuid().toString()).set(wallet);
-            this.walletsYml.save(node);
+            CommentedConfigurationNode root = this.walletsYml.load();
+            root.node("Wallets", wallet.getUuid().toString()).set(wallet);
+            this.walletsYml.save(root);
         } catch (Exception e) {
             e.printStackTrace();
         }

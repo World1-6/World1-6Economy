@@ -87,6 +87,6 @@ public class OnNoteRedeemListener implements Listener {
         String currencyName = amount == 1 ? currency.getCurrencyNameSingular() : currency.getCurrencyNamePlural();
         player.sendMessage(Translate.miniMessage(
                 "<green>Redeemed " + currency.getColor() + amountFormatted + " " + currencyName + "<green> successfully!"));
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
     }
 }

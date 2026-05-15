@@ -75,7 +75,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.63-stable")
-    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:38b1429036")
+    compileOnly("com.github.World1-6.World1-6Utils:World1-6Utils-Plugin:8b78891241")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") {
         exclude(group = "org.bukkit", module = "bukkit")
     }

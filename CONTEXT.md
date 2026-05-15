@@ -79,6 +79,9 @@ com.andrew121410.mc.world16economy
 │   ├── OnPlayerJoinEvent.java      # Load wallet from disk into cache
 │   └── OnPlayerQuitEvent.java      # Save wallet to disk, remove from cache
 │
+├── config/
+│   └── ConfigManager.java       # Loads config.yml via CustomYmlManager; writes defaults on first run
+│
 ├── managers/
 │   ├── CurrenciesManager.java   # In-memory map of UUID→Currency, default currency UUID
 │   └── WalletManager.java       # In-memory map of UUID→Wallet
@@ -102,6 +105,13 @@ Used for currencies and wallets. Managed by `StorageManager`. Custom type serial
 
 - `currencies.yml` — all currency definitions + mob drop config + default currency UUID
 - `wallets.yml` — all player wallet balances
+
+### YAML (CustomYmlManager / Bukkit)
+Used for plugin config. Managed by `ConfigManager`.
+
+- `config.yml` — bank tier definitions (display name, creation cost, balance limit, transaction limit). Written with defaults on first run (3 tiers: Basic, Standard, Premium). Add or edit tiers by adding sections under `bank.tiers.<level>`.
+
+**Important:** `saveWallet` must save the root node, not the `"Wallets"` child node — passing a child node to `walletsYml.save()` writes it as the new root, stripping the `Wallets:` wrapper and breaking all future loads.
 
 ### SQLite (EasySQL / CCUtilsJava)
 Used for notes and bank data. `EasySQL` wraps `MultiTableEasySQL` wraps `SQLite`.

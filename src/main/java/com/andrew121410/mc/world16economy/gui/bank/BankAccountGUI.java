@@ -3,8 +3,6 @@ package com.andrew121410.mc.world16economy.gui.bank;
 import com.andrew121410.mc.world16economy.World16Economy;
 import com.andrew121410.mc.world16economy.bank.*;
 import com.andrew121410.mc.world16economy.currency.Currency;
-import com.andrew121410.mc.world16economy.user.CurrencyWallet;
-import com.andrew121410.mc.world16economy.user.Wallet;
 import com.andrew121410.mc.world16utils.chat.Translate;
 import com.andrew121410.mc.world16utils.gui.GUIWindow;
 import com.andrew121410.mc.world16utils.gui.animation.Animation;
@@ -301,107 +299,6 @@ public class BankAccountGUI extends GUIWindow {
         this.update(buttons,
                 Translate.miniMessage("<dark_gray>✦ " + (isBusiness ? "<light_purple>" : "<aqua>") + account.getName()),
                 54);
-    }
-
-    @SuppressWarnings("unused")
-    private void handleDeposit(Player p, String input) {
-        double[] parsed = parseAmountAndCurrency(p, input);
-        if (parsed == null) return;
-        double amount = parsed[0];
-        Currency currency = resolveCurrency(parsed[1]);
-        if (currency == null) { p.sendMessage(Translate.miniMessage("<red>✖ Unknown currency.")); BankAccountGUI.open(plugin, p, account); return; }
-
-        BankTier tier = plugin.getBankManager().getTier(account.getTierLevel());
-        if (tier != null && tier.hasTransactionLimit() && amount > tier.getTransactionLimit()) {
-            p.sendMessage(Translate.miniMessage("<red>✖ Amount exceeds transaction limit of <white>" + String.format("%,.0f", tier.getTransactionLimit()) + "<red>."));
-            BankAccountGUI.open(plugin, p, account); return;
-        }
-        if (tier != null && tier.hasBalanceLimit() && account.getBalance(currency.getUuid()) + amount > tier.getBalanceLimit()) {
-            p.sendMessage(Translate.miniMessage("<red>✖ This would exceed the account balance limit of <white>" + String.format("%,.0f", tier.getBalanceLimit()) + "<red>."));
-            BankAccountGUI.open(plugin, p, account); return;
-        }
-
-        Wallet wallet = plugin.getWalletManager().getWallets().get(p.getUniqueId());
-        CurrencyWallet cw = wallet != null ? wallet.getCurrencyWallets().get(currency.getUuid()) : null;
-        if (cw == null || !cw.hasRequiredAmount(amount)) {
-            p.sendMessage(Translate.miniMessage("<red>✖ Insufficient funds in your wallet."));
-            BankAccountGUI.open(plugin, p, account); return;
-        }
-
-        cw.subtractAmount(amount);
-        account.addBalance(currency.getUuid(), amount);
-        plugin.getBankManager().saveBalances(account);
-        plugin.getBankManager().recordTransaction(account, BankTransaction.Type.DEPOSIT, currency.getUuid(), amount, p.getUniqueId());
-
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-        p.sendMessage(Translate.miniMessage("<green>✔ Deposited " + currency.getColor() + String.format("%,.2f", amount)
-                + " " + currency.getCurrencyNamePlural() + " <green>into <white>" + account.getName() + "<green>."));
-        BankAccountGUI.open(plugin, p, account);
-    }
-
-    private void handleWithdraw(Player p, String input) {
-        double[] parsed = parseAmountAndCurrency(p, input);
-        if (parsed == null) return;
-        double amount = parsed[0];
-        Currency currency = resolveCurrency(parsed[1]);
-        if (currency == null) { p.sendMessage(Translate.miniMessage("<red>✖ Unknown currency.")); BankAccountGUI.open(plugin, p, account); return; }
-
-        BankTier tier = plugin.getBankManager().getTier(account.getTierLevel());
-        if (tier != null && tier.hasTransactionLimit() && amount > tier.getTransactionLimit()) {
-            p.sendMessage(Translate.miniMessage("<red>✖ Amount exceeds transaction limit of <white>" + String.format("%,.0f", tier.getTransactionLimit()) + "<red>."));
-            BankAccountGUI.open(plugin, p, account); return;
-        }
-        if (account.getBalance(currency.getUuid()) < amount) {
-            p.sendMessage(Translate.miniMessage("<red>✖ Insufficient funds in this account."));
-            BankAccountGUI.open(plugin, p, account); return;
-        }
-
-        account.subtractBalance(currency.getUuid(), amount);
-        plugin.getBankManager().saveBalances(account);
-
-        Wallet wallet = plugin.getWalletManager().getWallets().get(p.getUniqueId());
-        if (wallet != null) {
-            wallet.getCurrencyWallets().computeIfAbsent(currency.getUuid(), uuid -> new CurrencyWallet(uuid, 0)).addAmount(amount);
-        }
-        plugin.getBankManager().recordTransaction(account, BankTransaction.Type.WITHDRAWAL, currency.getUuid(), amount, p.getUniqueId());
-
-        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-        p.sendMessage(Translate.miniMessage("<green>✔ Withdrew " + currency.getColor() + String.format("%,.2f", amount)
-                + " " + currency.getCurrencyNamePlural() + " <green>from <white>" + account.getName() + "<green>."));
-        BankAccountGUI.open(plugin, p, account);
-    }
-
-    // Parses "500" or "500 dollars" — returns [amount, currencyIndex] where currencyIndex is the default (0) or parsed
-    private double[] parseAmountAndCurrency(Player p, String input) {
-        String[] parts = input.trim().split(" ", 2);
-        try {
-            double amount = Double.parseDouble(parts[0]);
-            if (amount <= 0) throw new NumberFormatException();
-            return new double[]{ amount, parts.length > 1 ? findCurrencyIndex(parts[1]) : 0 };
-        } catch (NumberFormatException e) {
-            p.sendMessage(Translate.miniMessage("<red>✖ Invalid amount. Format: <white>500 <gray>or <white>500 dollars"));
-            BankAccountGUI.open(plugin, p, account);
-            return null;
-        }
-    }
-
-    private double findCurrencyIndex(String name) {
-        // Return index into currencies list matching the name; 0 = default
-        var currencies = plugin.getCurrenciesManager().getCurrenciesByUUID().values().stream().toList();
-        for (int i = 0; i < currencies.size(); i++) {
-            Currency c = currencies.get(i);
-            if (c.getName().equalsIgnoreCase(name)
-                    || c.getCurrencyNameSingular().equalsIgnoreCase(name)
-                    || c.getCurrencyNamePlural().equalsIgnoreCase(name)) return i;
-        }
-        return 0;
-    }
-
-    private Currency resolveCurrency(double index) {
-        var list = plugin.getCurrenciesManager().getCurrenciesByUUID().values().stream().toList();
-        int i = (int) index;
-        if (i < 0 || i >= list.size()) return plugin.getCurrenciesManager().getCurrencyByUUID(plugin.getCurrenciesManager().getDefaultCurrencyUUID());
-        return list.get(i);
     }
 
     private static String formatInterval(long ms) {

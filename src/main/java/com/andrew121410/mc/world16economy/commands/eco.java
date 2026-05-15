@@ -66,7 +66,8 @@ public class eco implements CommandExecutor, TabCompleter {
         switch (args[0].toLowerCase()) {
             case "give" -> {
                 if (args.length < 3) { sender.sendMessage(Translate.miniMessage("<red>Usage: /eco give <player> <amount> [currency]")); return; }
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+                OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[1]);
+                if (target == null) { sender.sendMessage(Translate.miniMessage("<red>✖ Player not found: <white>" + args[1])); return; }
                 double amount = parseAmount(sender, args[2]);
                 if (amount <= 0) return;
                 Currency currency = resolveCurrency(sender, args.length >= 4 ? args[3] : null);
@@ -79,7 +80,8 @@ public class eco implements CommandExecutor, TabCompleter {
             }
             case "take" -> {
                 if (args.length < 3) { sender.sendMessage(Translate.miniMessage("<red>Usage: /eco take <player> <amount> [currency]")); return; }
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+                OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[1]);
+                if (target == null) { sender.sendMessage(Translate.miniMessage("<red>✖ Player not found: <white>" + args[1])); return; }
                 double amount = parseAmount(sender, args[2]);
                 if (amount <= 0) return;
                 Currency currency = resolveCurrency(sender, args.length >= 4 ? args[3] : null);
@@ -93,7 +95,8 @@ public class eco implements CommandExecutor, TabCompleter {
             }
             case "set" -> {
                 if (args.length < 3) { sender.sendMessage(Translate.miniMessage("<red>Usage: /eco set <player> <amount> [currency]")); return; }
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+                OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[1]);
+                if (target == null) { sender.sendMessage(Translate.miniMessage("<red>✖ Player not found: <white>" + args[1])); return; }
                 double amount = parseAmount(sender, args[2]);
                 if (amount < 0) return;
                 Currency currency = resolveCurrency(sender, args.length >= 4 ? args[3] : null);
@@ -105,7 +108,8 @@ public class eco implements CommandExecutor, TabCompleter {
             }
             case "reset" -> {
                 if (args.length < 2) { sender.sendMessage(Translate.miniMessage("<red>Usage: /eco reset <player> [currency]")); return; }
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+                OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[1]);
+                if (target == null) { sender.sendMessage(Translate.miniMessage("<red>✖ Player not found: <white>" + args[1])); return; }
                 Currency currency = resolveCurrency(sender, args.length >= 3 ? args[2] : null);
                 if (currency == null) return;
                 Wallet wallet = getOrLoadWallet(target);

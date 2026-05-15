@@ -1,6 +1,7 @@
 package com.andrew121410.mc.world16economy;
 
 import com.andrew121410.mc.world16economy.bank.BankManager;
+import com.andrew121410.mc.world16economy.config.ConfigManager;
 import com.andrew121410.mc.world16economy.commands.bal;
 import com.andrew121410.mc.world16economy.commands.bank;
 import com.andrew121410.mc.world16economy.commands.eco;
@@ -26,6 +27,7 @@ public class World16Economy extends JavaPlugin {
     private WalletManager walletManager;
     private BankManager bankManager;
 
+    private ConfigManager configManager;
     private StorageManager storageManager;
     private NoteManager noteManager;
 
@@ -65,6 +67,7 @@ public class World16Economy extends JavaPlugin {
     }
 
     private void registerManagers() {
+        this.configManager = new ConfigManager(this);
         this.currenciesManager = new CurrenciesManager(this);
         this.walletManager = new WalletManager(this);
 
@@ -104,5 +107,9 @@ public class World16Economy extends JavaPlugin {
 
     public BankManager getBankManager() {
         return bankManager;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }
