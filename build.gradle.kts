@@ -1,6 +1,6 @@
 plugins {
     id("com.gradleup.shadow") version "9.4.1" // https://github.com/GradleUp/shadow
-    id("xyz.jpenilla.run-paper") version "3.0.2" // https://github.com/jpenilla/run-task
+    id("xyz.jpenilla.run-paper") version "3.1.0" // https://github.com/jpenilla/run-task
     `java-library`
     `maven-publish`
 }
